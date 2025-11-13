@@ -24,7 +24,6 @@ class ProductRepositoryImpl implements ProductRepository {
     int? brandId,
     int? supplierId,
     required double costPrice,
-    required double salePrice,
     required double originalPrice,
     String? color,
     String? size,
@@ -39,7 +38,6 @@ class ProductRepositoryImpl implements ProductRepository {
       brandId: brandId,
       supplierId: supplierId,
       costPrice: costPrice,
-      salePrice: salePrice,
       originalPrice: originalPrice,
       color: color,
       size: size,
@@ -63,7 +61,6 @@ class ProductRepositoryImpl implements ProductRepository {
     int? brandId,
     int? supplierId,
     required double costPrice,
-    required double salePrice,
     required double originalPrice,
     String? color,
     String? size,
@@ -80,7 +77,6 @@ class ProductRepositoryImpl implements ProductRepository {
       brandId: brandId,
       supplierId: supplierId,
       costPrice: costPrice,
-      salePrice: salePrice,
       originalPrice: originalPrice,
       color: color,
       size: size,
@@ -116,13 +112,13 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<StoreQuantity?> createStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
-    return await remote.createStoreQuantity(productId, storeId, quantity, storeName: storeName);
+  Future<StoreQuantity?> createStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
+    return await remote.createStoreQuantity(productId, storeId, quantity, salePrice: salePrice, storeName: storeName);
   }
 
   @override
-  Future<StoreQuantity?> updateStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
-    return await remote.updateStoreQuantity(productId, storeId, quantity, storeName: storeName);
+  Future<StoreQuantity?> updateStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
+    return await remote.updateStoreQuantity(productId, storeId, quantity, salePrice: salePrice, storeName: storeName);
   }
 }
 

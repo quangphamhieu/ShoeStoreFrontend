@@ -7,7 +7,6 @@ class Product {
   final int? brandId;
   final int? supplierId;
   final double costPrice;
-  final double salePrice;
   final double originalPrice;
   final String? color;
   final String? size;
@@ -24,7 +23,6 @@ class Product {
     this.brandId,
     this.supplierId,
     required this.costPrice,
-    required this.salePrice,
     required this.originalPrice,
     this.color,
     this.size,

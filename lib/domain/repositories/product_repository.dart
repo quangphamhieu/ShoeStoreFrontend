@@ -9,7 +9,6 @@ abstract class ProductRepository {
     int? brandId,
     int? supplierId,
     required double costPrice,
-    required double salePrice,
     required double originalPrice,
     String? color,
     String? size,
@@ -25,7 +24,6 @@ abstract class ProductRepository {
     int? brandId,
     int? supplierId,
     required double costPrice,
-    required double salePrice,
     required double originalPrice,
     String? color,
     String? size,
@@ -45,7 +43,7 @@ abstract class ProductRepository {
     double? maxPrice,
   });
   Future<List<String>> suggest(String keyword);
-  Future<StoreQuantity?> createStoreQuantity(int productId, int storeId, int quantity, {String? storeName});
-  Future<StoreQuantity?> updateStoreQuantity(int productId, int storeId, int quantity, {String? storeName});
+  Future<StoreQuantity?> createStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName});
+  Future<StoreQuantity?> updateStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName});
 }
 

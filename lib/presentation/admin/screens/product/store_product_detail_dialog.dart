@@ -109,7 +109,11 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                             onPressed: () async {
                               final success = await showDialog<bool>(
                                 context: context,
-                                builder: (_) => StoreQuantityFormDialog(productId: productId, editMode: false),
+                                builder: (_) => StoreQuantityFormDialog(
+                                  productId: productId,
+                                  editMode: false,
+                                  initialSalePrice: product.originalPrice,
+                                ),
                               );
                               if (success == true && mounted) {
                                 _reloadProduct();
@@ -172,6 +176,13 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                                   style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1F2933)),
                                 ),
                               ),
+                              Expanded(
+                                child: Text(
+                                  'Giá bán',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1F2933)),
+                                ),
+                              ),
                               const SizedBox(width: 100),
                             ],
                           ),
@@ -225,6 +236,14 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                                     ),
                                   ),
                                 ),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      '${store.salePrice.toStringAsFixed(0)} đ',
+                                      style: const TextStyle(color: Color(0xFF334155), fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
                                 SizedBox(
                                   width: 100,
                                   child: Row(
@@ -238,6 +257,7 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                                               productId: productId,
                                               storeId: store.storeId,
                                               initialQuantity: store.quantity,
+                                              initialSalePrice: store.salePrice,
                                               editMode: true,
                                             ),
                                           );

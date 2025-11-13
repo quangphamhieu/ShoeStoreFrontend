@@ -21,7 +21,6 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
   late final TextEditingController _costPriceController;
-  late final TextEditingController _salePriceController;
   late final TextEditingController _originalPriceController;
   late final TextEditingController _colorController;
   late final TextEditingController _sizeController;
@@ -42,7 +41,6 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
     super.initState();
     _nameController = TextEditingController();
     _costPriceController = TextEditingController();
-    _salePriceController = TextEditingController();
     _originalPriceController = TextEditingController();
     _colorController = TextEditingController();
     _sizeController = TextEditingController();
@@ -64,7 +62,6 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
             _brandId = p.brandId;
             _supplierId = p.supplierId;
             _costPriceController.text = p.costPrice.toString();
-            _salePriceController.text = p.salePrice.toString();
             _originalPriceController.text = p.originalPrice.toString();
             _colorController.text = p.color ?? '';
             _sizeController.text = p.size ?? '';
@@ -84,7 +81,6 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
   void dispose() {
     _nameController.dispose();
     _costPriceController.dispose();
-    _salePriceController.dispose();
     _originalPriceController.dispose();
     _colorController.dispose();
     _sizeController.dispose();
@@ -190,7 +186,6 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
     final provider = context.read<ProductProvider>();
     final name = _nameController.text.trim();
     final costPrice = double.parse(_costPriceController.text.trim());
-    final salePrice = double.parse(_salePriceController.text.trim());
     final originalPrice = double.parse(_originalPriceController.text.trim());
     final color = _colorController.text.trim().isEmpty ? null : _colorController.text.trim();
     final size = _sizeController.text.trim().isEmpty ? null : _sizeController.text.trim();
@@ -208,7 +203,6 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
           brandId: _brandId,
           supplierId: _supplierId,
           costPrice: costPrice,
-          salePrice: salePrice,
           originalPrice: originalPrice,
           color: color,
           size: size,
@@ -226,7 +220,6 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
         brandId: _brandId,
         supplierId: _supplierId,
         costPrice: costPrice,
-        salePrice: salePrice,
         originalPrice: originalPrice,
         color: color,
         size: size,
@@ -346,20 +339,6 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                                   textInputAction: TextInputAction.next,
                                   validator: (value) {
                                     if (value == null || value.trim().isEmpty) return 'Vui lòng nhập giá vốn';
-                                    if (double.tryParse(value) == null) return 'Giá không hợp lệ';
-                                    return null;
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 14),
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _salePriceController,
-                                  decoration: _decoration('Giá bán', hint: '0', required: true),
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.next,
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) return 'Vui lòng nhập giá bán';
                                     if (double.tryParse(value) == null) return 'Giá không hợp lệ';
                                     return null;
                                   },

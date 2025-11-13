@@ -40,7 +40,6 @@ class ProductTable extends StatelessWidget {
                 DataColumn(label: Text('Màu sắc')),
                 DataColumn(label: Center(child: Text('Kích thước'))),
                 DataColumn(label: Text('Giá gốc')),
-                DataColumn(label: Text('Giá bán')),
                 DataColumn(label: Center(child: Text('Số lượng tồn'))),
                 DataColumn(label: Text('Trạng thái')),
               ],
@@ -97,7 +96,6 @@ class ProductTable extends StatelessWidget {
                     DataCell(Text(p.color ?? '-')),
                     DataCell(Center(child: Text(p.size ?? '-'))),
                     DataCell(Text('${p.originalPrice.toStringAsFixed(0)} đ')),
-                    DataCell(Text('${p.salePrice.toStringAsFixed(0)} đ')),
                     DataCell(Center(child: Text(totalQuantity.toString()))),
                     DataCell(
                       Container(

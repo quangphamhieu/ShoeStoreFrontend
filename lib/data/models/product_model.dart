@@ -9,7 +9,6 @@ class ProductModel extends Product {
     int? brandId,
     int? supplierId,
     required double costPrice,
-    required double salePrice,
     required double originalPrice,
     String? color,
     String? size,
@@ -25,7 +24,6 @@ class ProductModel extends Product {
           brandId: brandId,
           supplierId: supplierId,
           costPrice: costPrice,
-          salePrice: salePrice,
           originalPrice: originalPrice,
           color: color,
           size: size,
@@ -47,7 +45,6 @@ class ProductModel extends Product {
       brandId: json['brandId'] as int?,
       supplierId: json['supplierId'] as int?,
       costPrice: (json['costPrice'] as num).toDouble(),
-      salePrice: (json['salePrice'] as num).toDouble(),
       originalPrice: (json['originalPrice'] as num).toDouble(),
       color: json['color'] as String?,
       size: json['size'] as String?,
@@ -65,12 +62,14 @@ class StoreQuantityModel extends StoreQuantity {
     required int storeId,
     required String storeName,
     required int quantity,
-  }) : super(storeId: storeId, storeName: storeName, quantity: quantity);
+    required double salePrice,
+  }) : super(storeId: storeId, storeName: storeName, quantity: quantity, salePrice: salePrice);
 
   factory StoreQuantityModel.fromJson(Map<String, dynamic> json) => StoreQuantityModel(
         storeId: json['storeId'] as int,
         storeName: json['storeName'] as String,
         quantity: json['quantity'] as int,
+        salePrice: (json['salePrice'] as num?)?.toDouble() ?? 0,
       );
 }
 

@@ -7,6 +7,7 @@ class StoreQuantityFormDialog extends StatefulWidget {
   final int productId;
   final int? storeId;
   final int? initialQuantity;
+  final double? initialSalePrice;
   final bool editMode;
 
   const StoreQuantityFormDialog({
@@ -14,6 +15,7 @@ class StoreQuantityFormDialog extends StatefulWidget {
     required this.productId,
     this.storeId,
     this.initialQuantity,
+    this.initialSalePrice,
     required this.editMode,
   });
 
@@ -25,12 +27,16 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
   final _formKey = GlobalKey<FormState>();
   int? _selectedStoreId;
   late final TextEditingController _quantityController;
+  late final TextEditingController _salePriceController;
+  late final double _initialSalePriceValue;
   bool _loading = false;
 
   @override
   void initState() {
     super.initState();
     _quantityController = TextEditingController(text: widget.initialQuantity?.toString() ?? '0');
+    _initialSalePriceValue = widget.initialSalePrice ?? 0;
+    _salePriceController = TextEditingController(text: _initialSalePriceValue.toString());
     _selectedStoreId = widget.storeId;
     
     // Đảm bảo stores đã được load
@@ -45,6 +51,7 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
   @override
   void dispose() {
     _quantityController.dispose();
+    _salePriceController.dispose();
     super.dispose();
   }
 
@@ -110,7 +117,7 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
       
       setState(() => _loading = true);
       try {
-        final success = await productProvider.updateStoreQuantity(widget.productId, widget.storeId!, quantity, storeName: storeName);
+        final success = await productProvider.updateStoreQuantity(widget.productId, widget.storeId!, quantity, salePrice: null, storeName: storeName);
         setState(() => _loading = false);
         if (mounted) {
           if (success) {
@@ -142,7 +149,13 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
       
       setState(() => _loading = true);
       try {
-        final success = await productProvider.createStoreQuantity(widget.productId, _selectedStoreId!, quantity, storeName: storeName);
+        final success = await productProvider.createStoreQuantity(
+          widget.productId,
+          _selectedStoreId!,
+          quantity,
+          salePrice: _initialSalePriceValue,
+          storeName: storeName,
+        );
         setState(() => _loading = false);
         if (mounted) {
           if (success) {
@@ -227,6 +240,13 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
                   if (qty < 0) return 'Số lượng phải >= 0';
                   return null;
                 },
+              ),
+              const SizedBox(height: 14),
+              TextFormField(
+                controller: _salePriceController,
+                decoration: _decoration('Giá bán tại cửa hàng', hint: '0'),
+                readOnly: true,
+                enabled: false,
               ),
               const SizedBox(height: 24),
               Row(

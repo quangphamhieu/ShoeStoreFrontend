@@ -5,7 +5,7 @@ class CreateStoreQuantityUseCase {
   final ProductRepository repository;
   CreateStoreQuantityUseCase(this.repository);
 
-  Future<StoreQuantity?> call(int productId, int storeId, int quantity, {String? storeName}) =>
-      repository.createStoreQuantity(productId, storeId, quantity, storeName: storeName);
+  Future<StoreQuantity?> call(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) =>
+      repository.createStoreQuantity(productId, storeId, quantity, salePrice: salePrice, storeName: storeName);
 }
 

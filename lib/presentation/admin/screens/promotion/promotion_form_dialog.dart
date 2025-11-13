@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../domain/entities/product.dart';
+import '../../../../domain/entities/store_quantity.dart';
 import '../../../../domain/entities/promotion_product.dart';
 import '../../provider/promotion_provider.dart';
 import '../../provider/product_provider.dart';
+import '../../provider/store_provider.dart';
 
 class PromotionFormDialog extends StatefulWidget {
   final bool editMode;
@@ -25,8 +27,8 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
   bool _loading = false;
   bool _prefillLoading = false;
   
-  List<Product> _availableProducts = [];
-  List<Map<String, dynamic>> _selectedProducts = []; // [{productId, productName, discountPercent}]
+  int? _selectedStoreId;
+  List<Map<String, dynamic>> _selectedProducts = []; // [{productId, productName, discountPercent, salePrice}]
   List<Product> _searchResults = [];
 
   @override
@@ -38,6 +40,7 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
 
     Future.microtask(() {
       context.read<ProductProvider>().loadAll();
+      context.read<StoreProvider>().loadAll();
     });
 
     if (widget.editMode) {
@@ -53,10 +56,24 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
           _startDate = p.startDate;
           _endDate = p.endDate;
           _statusId = p.statusId;
-          _selectedProducts = p.products.map((pp) => {
-            'productId': pp.productId,
-            'productName': pp.productName,
-            'discountPercent': pp.discountPercent,
+          final storeId = p.stores.isNotEmpty ? p.stores.first.storeId : null;
+          _selectedStoreId = storeId;
+          final productProvider = context.read<ProductProvider>();
+          _selectedProducts = p.products.map((pp) {
+            double salePrice = 0;
+            if (storeId != null) {
+              try {
+                final product = productProvider.products.firstWhere((prod) => prod.id == pp.productId);
+                final storeInfo = product.stores.firstWhere((s) => s.storeId == storeId);
+                salePrice = storeInfo.salePrice;
+              } catch (_) {}
+            }
+            return {
+              'productId': pp.productId,
+              'productName': pp.productName,
+              'discountPercent': pp.discountPercent,
+              'salePrice': salePrice,
+            };
           }).toList();
           for (var product in _selectedProducts) {
             _discountControllers[product['productId']] = TextEditingController(
@@ -80,29 +97,41 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
   }
 
   void _searchProducts(String query) {
-    if (query.isEmpty) {
+    if (query.isEmpty || _selectedStoreId == null) {
       setState(() => _searchResults = []);
       return;
     }
     final productProvider = context.read<ProductProvider>();
     final q = query.toLowerCase();
+    final storeId = _selectedStoreId!;
     setState(() {
-      _searchResults = productProvider.products.where((p) {
-        final name = p.name.toLowerCase();
-        final sku = (p.sku ?? '').toLowerCase();
-        return name.contains(q) || sku.contains(q);
-      }).where((p) => !_selectedProducts.any((sp) => sp['productId'] == p.id)).toList();
+      _searchResults = productProvider.products
+          .where((p) => p.stores.any((s) => s.storeId == storeId))
+          .where((p) {
+            final name = p.name.toLowerCase();
+            final sku = (p.sku ?? '').toLowerCase();
+            return name.contains(q) || sku.contains(q);
+          })
+          .where((p) => !_selectedProducts.any((sp) => sp['productId'] == p.id))
+          .toList();
     });
   }
 
   void _addProduct(Product product) {
+    if (_selectedStoreId == null) return;
     if (_selectedProducts.any((p) => p['productId'] == product.id)) return;
-    
+    final storeId = _selectedStoreId!;
+    double salePrice = 0;
+    try {
+      salePrice = product.stores.firstWhere((s) => s.storeId == storeId).salePrice;
+    } catch (_) {}
+
     setState(() {
       _selectedProducts.add({
         'productId': product.id,
         'productName': product.name,
         'discountPercent': 0.0,
+        'salePrice': salePrice,
       });
       _discountControllers[product.id] = TextEditingController(text: '0');
       _searchController.clear();
@@ -115,6 +144,20 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
       _selectedProducts.removeWhere((p) => p['productId'] == productId);
       _discountControllers[productId]?.dispose();
       _discountControllers.remove(productId);
+    });
+  }
+
+  void _onStoreChanged(int? storeId) {
+    if (_selectedStoreId == storeId) return;
+    setState(() {
+      _selectedStoreId = storeId;
+      // Clear selected products when store changes
+      for (var controller in _discountControllers.values) {
+        controller.dispose();
+      }
+      _discountControllers.clear();
+      _selectedProducts.clear();
+      _searchResults.clear();
     });
   }
 
@@ -164,6 +207,12 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
 
   Future<void> _handleSubmit() async {
     if (_loading || !_formKey.currentState!.validate()) return;
+    if (_selectedStoreId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Vui lòng chọn cửa hàng áp dụng')),
+      );
+      return;
+    }
     if (_selectedProducts.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Vui lòng thêm ít nhất một sản phẩm')),
@@ -176,6 +225,7 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
       'productId': p['productId'],
       'discountPercent': double.parse(_discountControllers[p['productId']]!.text),
     }).toList();
+    final storeIds = [_selectedStoreId!];
 
     setState(() => _loading = true);
 
@@ -190,7 +240,7 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
           endDate: _endDate,
           statusId: _statusId,
           products: products,
-          storeIds: [], // TODO: Add store selection if needed
+          storeIds: storeIds,
         );
       }
     } else {
@@ -200,7 +250,7 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
         endDate: _endDate,
         statusId: _statusId,
         products: products,
-        storeIds: [], // TODO: Add store selection if needed
+        storeIds: storeIds,
       );
     }
 
@@ -219,6 +269,8 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final storeProvider = context.watch<StoreProvider>();
+
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -269,6 +321,21 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
                               if (value == null || value.trim().isEmpty) return 'Vui lòng nhập tên khuyến mãi';
                               return null;
                             },
+                          ),
+                          const SizedBox(height: 14),
+                          DropdownButtonFormField<int?>(
+                            value: _selectedStoreId,
+                            decoration: _decoration('Cửa hàng áp dụng', required: true),
+                            items: [
+                              const DropdownMenuItem<int?>(value: null, child: Text('Chọn cửa hàng')),
+                              ...storeProvider.stores.map(
+                                (store) => DropdownMenuItem<int?>(
+                                  value: store.id,
+                                  child: Text(store.name),
+                                ),
+                              ),
+                            ],
+                            onChanged: (value) => _onStoreChanged(value),
                           ),
                           const SizedBox(height: 14),
                           Row(
@@ -328,12 +395,30 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
                                     const Spacer(),
                                     IconButton(
                                       onPressed: () {
+                                        if (_selectedStoreId == null) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Vui lòng chọn cửa hàng trước')),
+                                          );
+                                          return;
+                                        }
+                                        final storeId = _selectedStoreId!;
+                                        final filteredProducts = context
+                                            .read<ProductProvider>()
+                                            .products
+                                            .where((p) => p.stores.any((s) => s.storeId == storeId))
+                                            .where((p) => !_selectedProducts.any((sp) => sp['productId'] == p.id))
+                                            .toList();
+                                        if (filteredProducts.isEmpty) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Không có sản phẩm nào cho cửa hàng này')), 
+                                          );
+                                          return;
+                                        }
                                         showDialog(
                                           context: context,
                                           builder: (_) => _ProductSearchDialog(
-                                            products: context.read<ProductProvider>().products
-                                                .where((p) => !_selectedProducts.any((sp) => sp['productId'] == p.id))
-                                                .toList(),
+                                            products: filteredProducts,
+                                            storeId: storeId,
                                             onSelect: _addProduct,
                                           ),
                                         );
@@ -373,9 +458,13 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
                                       itemCount: _searchResults.length,
                                       itemBuilder: (context, index) {
                                         final product = _searchResults[index];
+                                        double salePrice = 0;
+                                        try {
+                                          salePrice = product.stores.firstWhere((s) => s.storeId == _selectedStoreId).salePrice;
+                                        } catch (_) {}
                                         return ListTile(
                                           title: Text(product.name),
-                                          subtitle: Text(product.sku ?? ''),
+                                          subtitle: Text('${product.sku ?? ''} • Giá bán: ${salePrice.toStringAsFixed(0)} đ'),
                                           trailing: IconButton(
                                             icon: const Icon(Icons.add, color: Color(0xFF2563EB)),
                                             onPressed: () => _addProduct(product),
@@ -424,6 +513,12 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
                                             style: const TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                         ),
+                                        const SizedBox(width: 12),
+                                        Text(
+                                          'Giá: ${((product['salePrice'] ?? 0) as double).toStringAsFixed(0)} đ',
+                                          style: const TextStyle(color: Color(0xFF64748B)),
+                                        ),
+                                        const SizedBox(width: 16),
                                         SizedBox(
                                           width: 100,
                                           child: TextFormField(
@@ -498,9 +593,10 @@ class _PromotionFormDialogState extends State<PromotionFormDialog> {
 
 class _ProductSearchDialog extends StatelessWidget {
   final List<Product> products;
+  final int storeId;
   final Function(Product) onSelect;
 
-  const _ProductSearchDialog({required this.products, required this.onSelect});
+  const _ProductSearchDialog({required this.products, required this.storeId, required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
@@ -517,9 +613,13 @@ class _ProductSearchDialog extends StatelessWidget {
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   final product = products[index];
+                  double salePrice = 0;
+                  try {
+                    salePrice = product.stores.firstWhere((s) => s.storeId == storeId).salePrice;
+                  } catch (_) {}
                   return ListTile(
                     title: Text(product.name),
-                    subtitle: Text(product.sku ?? ''),
+                    subtitle: Text('${product.sku ?? ''} • Giá bán: ${salePrice.toStringAsFixed(0)} đ'),
                     trailing: IconButton(
                       icon: const Icon(Icons.add, color: Color(0xFF2563EB)),
                       onPressed: () {

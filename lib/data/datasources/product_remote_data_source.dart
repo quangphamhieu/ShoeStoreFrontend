@@ -30,7 +30,6 @@ class ProductRemoteDataSource {
     int? brandId,
     int? supplierId,
     required double costPrice,
-    required double salePrice,
     required double originalPrice,
     String? color,
     String? size,
@@ -45,7 +44,6 @@ class ProductRemoteDataSource {
       if (brandId != null) 'BrandId': brandId,
       if (supplierId != null) 'SupplierId': supplierId,
       'CostPrice': costPrice,
-      'SalePrice': salePrice,
       'OriginalPrice': originalPrice,
       if (color != null) 'Color': color,
       if (size != null) 'Size': size,
@@ -67,7 +65,6 @@ class ProductRemoteDataSource {
     int? brandId,
     int? supplierId,
     required double costPrice,
-    required double salePrice,
     required double originalPrice,
     String? color,
     String? size,
@@ -83,7 +80,6 @@ class ProductRemoteDataSource {
       if (brandId != null) 'BrandId': brandId,
       if (supplierId != null) 'SupplierId': supplierId,
       'CostPrice': costPrice,
-      'SalePrice': salePrice,
       'OriginalPrice': originalPrice,
       if (color != null) 'Color': color,
       if (size != null) 'Size': size,
@@ -140,11 +136,12 @@ class ProductRemoteDataSource {
     return [];
   }
 
-  Future<StoreQuantityModel?> createStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
-    final body = {
+  Future<StoreQuantityModel?> createStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
+    final body = <String, dynamic>{
       'storeId': storeId,
       'storeName': storeName ?? '',
       'quantity': quantity,
+      if (salePrice != null) 'salePrice': salePrice,
     };
     try {
       final url = '${ApiEndpoint.products}/$productId/store-quantity';
@@ -177,11 +174,12 @@ class ProductRemoteDataSource {
     }
   }
 
-  Future<StoreQuantityModel?> updateStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
-    final body = {
+  Future<StoreQuantityModel?> updateStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
+    final body = <String, dynamic>{
       'storeId': storeId,
       'storeName': storeName ?? '',
       'quantity': quantity,
+      if (salePrice != null) 'salePrice': salePrice,
     };
     try {
       final url = '${ApiEndpoint.products}/$productId/store-quantity';

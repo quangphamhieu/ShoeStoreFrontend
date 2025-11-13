@@ -86,7 +86,6 @@ class ProductProvider extends ChangeNotifier {
     int? brandId,
     int? supplierId,
     required double costPrice,
-    required double salePrice,
     required double originalPrice,
     String? color,
     String? size,
@@ -102,7 +101,6 @@ class ProductProvider extends ChangeNotifier {
         brandId: brandId,
         supplierId: supplierId,
         costPrice: costPrice,
-        salePrice: salePrice,
         originalPrice: originalPrice,
         color: color,
         size: size,
@@ -125,7 +123,6 @@ class ProductProvider extends ChangeNotifier {
     int? brandId,
     int? supplierId,
     required double costPrice,
-    required double salePrice,
     required double originalPrice,
     String? color,
     String? size,
@@ -143,7 +140,6 @@ class ProductProvider extends ChangeNotifier {
         brandId: brandId,
         supplierId: supplierId,
         costPrice: costPrice,
-        salePrice: salePrice,
         originalPrice: originalPrice,
         color: color,
         size: size,
@@ -171,9 +167,9 @@ class ProductProvider extends ChangeNotifier {
     return result;
   }
 
-  Future<bool> createStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
+  Future<bool> createStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
     try {
-      final result = await createStoreQuantityUseCase.call(productId, storeId, quantity, storeName: storeName);
+      final result = await createStoreQuantityUseCase.call(productId, storeId, quantity, salePrice: salePrice, storeName: storeName);
       if (result != null) {
         await loadAll();
         return true;
@@ -184,9 +180,9 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
+  Future<bool> updateStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
     try {
-      final result = await updateStoreQuantityUseCase.call(productId, storeId, quantity, storeName: storeName);
+      final result = await updateStoreQuantityUseCase.call(productId, storeId, quantity, salePrice: salePrice, storeName: storeName);
       if (result != null) {
         await loadAll();
         return true;
