@@ -45,7 +45,7 @@ abstract class ProductRepository {
     double? maxPrice,
   });
   Future<List<String>> suggest(String keyword);
-  Future<StoreQuantity?> createStoreQuantity(int productId, int storeId, int quantity);
-  Future<StoreQuantity?> updateStoreQuantity(int productId, int storeId, int quantity);
+  Future<StoreQuantity?> createStoreQuantity(int productId, int storeId, int quantity, {String? storeName});
+  Future<StoreQuantity?> updateStoreQuantity(int productId, int storeId, int quantity, {String? storeName});
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/supplier_provider.dart';
 import '../../widgets/side_menu.dart';
+import '../../widgets/app_header.dart';
 import 'supplier_table.dart';
 import 'supplier_toolbar.dart';
 
@@ -30,12 +31,16 @@ class _SupplierScreenState extends State<SupplierScreen> {
           Expanded(
             child: Container(
               color: const Color(0xFFF5F7FA),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SupplierToolbar(),
+              child: Column(
+                children: [
+                  const AppHeader(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SupplierToolbar(),
                     const SizedBox(height: 24),
                     Expanded(
                       child: Container(
@@ -58,8 +63,11 @@ class _SupplierScreenState extends State<SupplierScreen> {
                               ),
                       ),
                     ),
-                  ],
-                ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

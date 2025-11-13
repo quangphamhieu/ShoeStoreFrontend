@@ -32,6 +32,14 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
     super.initState();
     _quantityController = TextEditingController(text: widget.initialQuantity?.toString() ?? '0');
     _selectedStoreId = widget.storeId;
+    
+    // Đảm bảo stores đã được load
+    Future.microtask(() {
+      final storeProvider = context.read<StoreProvider>();
+      if (storeProvider.stores.isEmpty) {
+        storeProvider.loadAll();
+      }
+    });
   }
 
   @override
@@ -75,6 +83,7 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
     if (_loading || !_formKey.currentState!.validate()) return;
 
     final productProvider = context.read<ProductProvider>();
+    final storeProvider = context.read<StoreProvider>();
     final quantity = int.parse(_quantityController.text.trim());
 
     if (widget.editMode) {
@@ -82,9 +91,26 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lỗi: Không tìm thấy cửa hàng')));
         return;
       }
+      // Lấy storeName từ store list
+      String? storeName;
+      try {
+        final store = storeProvider.stores.firstWhere((s) => s.id == widget.storeId);
+        storeName = store.name;
+      } catch (_) {
+        // Nếu không tìm thấy, thử tìm với _selectedStoreId
+        try {
+          if (_selectedStoreId != null) {
+            final store = storeProvider.stores.firstWhere((s) => s.id == _selectedStoreId);
+            storeName = store.name;
+          }
+        } catch (_) {
+          storeName = null;
+        }
+      }
+      
       setState(() => _loading = true);
       try {
-        final success = await productProvider.updateStoreQuantity(widget.productId, widget.storeId!, quantity);
+        final success = await productProvider.updateStoreQuantity(widget.productId, widget.storeId!, quantity, storeName: storeName);
         setState(() => _loading = false);
         if (mounted) {
           if (success) {
@@ -105,9 +131,18 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng chọn cửa hàng')));
         return;
       }
+      // Lấy storeName từ store list
+      String? storeName;
+      try {
+        final store = storeProvider.stores.firstWhere((s) => s.id == _selectedStoreId);
+        storeName = store.name;
+      } catch (_) {
+        storeName = null;
+      }
+      
       setState(() => _loading = true);
       try {
-        final success = await productProvider.createStoreQuantity(widget.productId, _selectedStoreId!, quantity);
+        final success = await productProvider.createStoreQuantity(widget.productId, _selectedStoreId!, quantity, storeName: storeName);
         setState(() => _loading = false);
         if (mounted) {
           if (success) {
@@ -170,7 +205,7 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
               ),
               const SizedBox(height: 20),
               DropdownButtonFormField<int?>(
-                value: _selectedStoreId,
+                value: _selectedStoreId != null && storeProvider.stores.any((s) => s.id == _selectedStoreId) ? _selectedStoreId : null,
                 decoration: _decoration('Cửa hàng', required: true),
                 items: [
                   const DropdownMenuItem<int?>(value: null, child: Text('Chọn cửa hàng')),

@@ -5,14 +5,23 @@ import 'data/datasources/brand_remote_data_source.dart';
 import 'data/datasources/store_remote_data_source.dart';
 import 'data/datasources/supplier_remote_data_source.dart';
 import 'data/datasources/product_remote_data_source.dart';
+import 'data/datasources/promotion_remote_data_source.dart';
+import 'data/datasources/receipt_remote_data_source.dart';
+import 'data/datasources/notification_remote_data_source.dart';
 import 'data/repositories/brand_repository_impl.dart';
 import 'data/repositories/store_repository_impl.dart';
 import 'data/repositories/supplier_repository_impl.dart';
 import 'data/repositories/product_repository_impl.dart';
+import 'data/repositories/promotion_repository_impl.dart';
+import 'data/repositories/receipt_repository_impl.dart';
+import 'data/repositories/notification_repository_impl.dart';
 import 'domain/repositories/brand_repository.dart';
 import 'domain/repositories/store_repository.dart';
 import 'domain/repositories/supplier_repository.dart';
 import 'domain/repositories/product_repository.dart';
+import 'domain/repositories/promotion_repository.dart';
+import 'domain/repositories/receipt_repository.dart';
+import 'domain/repositories/notification_repository.dart';
 import 'domain/usecases/brand/get_all_brands_usecase.dart';
 import 'domain/usecases/brand/get_brand_by_id_usecase.dart';
 import 'domain/usecases/brand/create_brand_usecase.dart';
@@ -36,10 +45,27 @@ import 'domain/usecases/product/delete_product_usecase.dart';
 import 'domain/usecases/product/search_products_usecase.dart';
 import 'domain/usecases/product/create_store_quantity_usecase.dart';
 import 'domain/usecases/product/update_store_quantity_usecase.dart';
+import 'domain/usecases/promotion/get_all_promotions_usecase.dart';
+import 'domain/usecases/promotion/get_promotion_by_id_usecase.dart';
+import 'domain/usecases/promotion/create_promotion_usecase.dart';
+import 'domain/usecases/promotion/update_promotion_usecase.dart';
+import 'domain/usecases/promotion/delete_promotion_usecase.dart';
+import 'domain/usecases/receipt/get_all_receipts_usecase.dart';
+import 'domain/usecases/receipt/get_receipt_by_id_usecase.dart';
+import 'domain/usecases/receipt/create_receipt_usecase.dart';
+import 'domain/usecases/receipt/update_receipt_info_usecase.dart';
+import 'domain/usecases/receipt/update_receipt_received_usecase.dart';
+import 'domain/usecases/receipt/delete_receipt_usecase.dart';
+import 'domain/usecases/notification/get_all_notifications_usecase.dart';
+import 'domain/usecases/notification/get_notification_by_id_usecase.dart';
+import 'domain/usecases/notification/delete_notification_usecase.dart';
 import 'presentation/admin/provider/brand_provider.dart';
 import 'presentation/admin/provider/store_provider.dart';
 import 'presentation/admin/provider/supplier_provider.dart';
 import 'presentation/admin/provider/product_provider.dart';
+import 'presentation/admin/provider/promotion_provider.dart';
+import 'presentation/admin/provider/receipt_provider.dart';
+import 'presentation/admin/provider/notification_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -52,12 +78,18 @@ Future<void> init() async {
   sl.registerLazySingleton(() => StoreRemoteDataSource(sl()));
   sl.registerLazySingleton(() => SupplierRemoteDataSource(sl()));
   sl.registerLazySingleton(() => ProductRemoteDataSource(sl()));
+  sl.registerLazySingleton(() => PromotionRemoteDataSource(sl()));
+  sl.registerLazySingleton(() => ReceiptRemoteDataSource(sl()));
+  sl.registerLazySingleton(() => NotificationRemoteDataSource(sl()));
 
   // Repository
   sl.registerLazySingleton<BrandRepository>(() => BrandRepositoryImpl(sl()));
   sl.registerLazySingleton<StoreRepository>(() => StoreRepositoryImpl(sl()));
   sl.registerLazySingleton<SupplierRepository>(() => SupplierRepositoryImpl(sl()));
   sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl(sl()));
+  sl.registerLazySingleton<PromotionRepository>(() => PromotionRepositoryImpl(sl()));
+  sl.registerLazySingleton<ReceiptRepository>(() => ReceiptRepositoryImpl(sl()));
+  sl.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(sl()));
 
   // Usecases
   sl.registerLazySingleton(() => GetAllBrandsUseCase(sl()));
@@ -83,6 +115,20 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SearchProductsUseCase(sl()));
   sl.registerLazySingleton(() => CreateStoreQuantityUseCase(sl()));
   sl.registerLazySingleton(() => UpdateStoreQuantityUseCase(sl()));
+  sl.registerLazySingleton(() => GetAllPromotionsUseCase(sl()));
+  sl.registerLazySingleton(() => GetPromotionByIdUseCase(sl()));
+  sl.registerLazySingleton(() => CreatePromotionUseCase(sl()));
+  sl.registerLazySingleton(() => UpdatePromotionUseCase(sl()));
+  sl.registerLazySingleton(() => DeletePromotionUseCase(sl()));
+  sl.registerLazySingleton(() => GetAllReceiptsUseCase(sl()));
+  sl.registerLazySingleton(() => GetReceiptByIdUseCase(sl()));
+  sl.registerLazySingleton(() => CreateReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateReceiptInfoUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateReceiptReceivedUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => GetAllNotificationsUseCase(sl()));
+  sl.registerLazySingleton(() => GetNotificationByIdUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteNotificationUseCase(sl()));
 
   // Provider: register factory so each provider instance created by provider package is new if needed
   sl.registerFactory(() => BrandProvider(
@@ -115,5 +161,25 @@ Future<void> init() async {
         searchUseCase: sl(),
         createStoreQuantityUseCase: sl(),
         updateStoreQuantityUseCase: sl(),
+      ));
+  sl.registerFactory(() => PromotionProvider(
+        getAllUseCase: sl(),
+        getByIdUseCase: sl(),
+        createUseCase: sl(),
+        updateUseCase: sl(),
+        deleteUseCase: sl(),
+      ));
+  sl.registerFactory(() => ReceiptProvider(
+        getAllUseCase: sl(),
+        getByIdUseCase: sl(),
+        createUseCase: sl(),
+        updateInfoUseCase: sl(),
+        updateReceivedUseCase: sl(),
+        deleteUseCase: sl(),
+      ));
+  sl.registerFactory(() => NotificationProvider(
+        getAllUseCase: sl(),
+        getByIdUseCase: sl(),
+        deleteUseCase: sl(),
       ));
 }

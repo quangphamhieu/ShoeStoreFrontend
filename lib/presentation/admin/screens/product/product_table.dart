@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shoestorefe/domain/entities/product.dart';
+import '../../../../domain/entities/product.dart';
 import '../../provider/product_provider.dart';
 import '../../provider/brand_provider.dart';
 
@@ -37,8 +37,11 @@ class ProductTable extends StatelessWidget {
                 DataColumn(label: Text('Hình ảnh')),
                 DataColumn(label: Text('Tên')),
                 DataColumn(label: Text('Thương hiệu')),
+                DataColumn(label: Text('Màu sắc')),
+                DataColumn(label: Center(child: Text('Kích thước'))),
+                DataColumn(label: Text('Giá gốc')),
                 DataColumn(label: Text('Giá bán')),
-                DataColumn(label: Text('Số lượng tồn')),
+                DataColumn(label: Center(child: Text('Số lượng tồn'))),
                 DataColumn(label: Text('Trạng thái')),
               ],
               rows: products.map((p) {
@@ -91,8 +94,11 @@ class ProductTable extends StatelessWidget {
                       ),
                     ),
                     DataCell(Text(brandName)),
+                    DataCell(Text(p.color ?? '-')),
+                    DataCell(Center(child: Text(p.size ?? '-'))),
+                    DataCell(Text('${p.originalPrice.toStringAsFixed(0)} đ')),
                     DataCell(Text('${p.salePrice.toStringAsFixed(0)} đ')),
-                    DataCell(Text(totalQuantity.toString())),
+                    DataCell(Center(child: Text(totalQuantity.toString()))),
                     DataCell(
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

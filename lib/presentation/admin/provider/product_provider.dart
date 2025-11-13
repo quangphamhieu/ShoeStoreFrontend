@@ -171,9 +171,9 @@ class ProductProvider extends ChangeNotifier {
     return result;
   }
 
-  Future<bool> createStoreQuantity(int productId, int storeId, int quantity) async {
+  Future<bool> createStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
     try {
-      final result = await createStoreQuantityUseCase.call(productId, storeId, quantity);
+      final result = await createStoreQuantityUseCase.call(productId, storeId, quantity, storeName: storeName);
       if (result != null) {
         await loadAll();
         return true;
@@ -184,9 +184,9 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateStoreQuantity(int productId, int storeId, int quantity) async {
+  Future<bool> updateStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
     try {
-      final result = await updateStoreQuantityUseCase.call(productId, storeId, quantity);
+      final result = await updateStoreQuantityUseCase.call(productId, storeId, quantity, storeName: storeName);
       if (result != null) {
         await loadAll();
         return true;

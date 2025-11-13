@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../provider/product_provider.dart';
 import '../../provider/brand_provider.dart';
 import '../../widgets/side_menu.dart';
+import '../../widgets/app_header.dart';
 import 'product_table.dart';
 import 'product_toolbar.dart';
 
@@ -34,12 +35,16 @@ class _ProductScreenState extends State<ProductScreen> {
           Expanded(
             child: Container(
               color: const Color(0xFFF5F7FA),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const ProductToolbar(),
+              child: Column(
+                children: [
+                  const AppHeader(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(32, 24, 32, 32),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const ProductToolbar(),
                     const SizedBox(height: 24),
                     Expanded(
                       child: Container(
@@ -62,8 +67,11 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                       ),
                     ),
-                  ],
-                ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

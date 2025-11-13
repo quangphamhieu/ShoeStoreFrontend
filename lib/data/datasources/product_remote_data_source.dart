@@ -140,9 +140,10 @@ class ProductRemoteDataSource {
     return [];
   }
 
-  Future<StoreQuantityModel?> createStoreQuantity(int productId, int storeId, int quantity) async {
+  Future<StoreQuantityModel?> createStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
     final body = {
       'storeId': storeId,
+      'storeName': storeName ?? '',
       'quantity': quantity,
     };
     try {
@@ -161,6 +162,13 @@ class ProductRemoteDataSource {
       String? errorMessage;
       if (errorData is Map) {
         errorMessage = errorData['message']?.toString();
+        // Log thêm thông tin lỗi để debug
+        if (errorData.containsKey('errors')) {
+          final errors = errorData['errors'];
+          if (errors != null) {
+            errorMessage = '$errorMessage\nErrors: $errors';
+          }
+        }
       }
       throw Exception(errorMessage ?? e.message ?? 'Lỗi khi thêm số lượng tồn kho');
     } catch (e) {
@@ -169,9 +177,10 @@ class ProductRemoteDataSource {
     }
   }
 
-  Future<StoreQuantityModel?> updateStoreQuantity(int productId, int storeId, int quantity) async {
+  Future<StoreQuantityModel?> updateStoreQuantity(int productId, int storeId, int quantity, {String? storeName}) async {
     final body = {
       'storeId': storeId,
+      'storeName': storeName ?? '',
       'quantity': quantity,
     };
     try {
@@ -190,6 +199,13 @@ class ProductRemoteDataSource {
       String? errorMessage;
       if (errorData is Map) {
         errorMessage = errorData['message']?.toString();
+        // Log thêm thông tin lỗi để debug
+        if (errorData.containsKey('errors')) {
+          final errors = errorData['errors'];
+          if (errors != null) {
+            errorMessage = '$errorMessage\nErrors: $errors';
+          }
+        }
       }
       throw Exception(errorMessage ?? e.message ?? 'Lỗi khi cập nhật số lượng tồn kho');
     } catch (e) {

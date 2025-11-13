@@ -7,9 +7,7 @@ import 'package:provider/provider.dart';
 import '../../provider/product_provider.dart';
 import '../../provider/brand_provider.dart';
 import '../../provider/supplier_provider.dart';
-
-// Conditional import for image_picker - only on non-web platforms
-import 'image_picker_stub.dart' if (dart.library.io) 'package:image_picker/image_picker.dart';
+import '../../../../core/utils/image_picker_stub.dart' if (dart.library.io) 'package:image_picker/image_picker.dart';
 
 class ProductFormDialog extends StatefulWidget {
   final bool editMode;
@@ -314,7 +312,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                             children: [
                               Expanded(
                                 child: DropdownButtonFormField<int?>(
-                                  value: _brandId,
+                                  value: _brandId != null && brandProvider.brands.any((b) => b.id == _brandId) ? _brandId : null,
                                   decoration: _decoration('Thương hiệu'),
                                   items: [
                                     const DropdownMenuItem<int?>(value: null, child: Text('Chọn thương hiệu')),
@@ -326,7 +324,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                               const SizedBox(width: 14),
                               Expanded(
                                 child: DropdownButtonFormField<int?>(
-                                  value: _supplierId,
+                                  value: _supplierId != null && supplierProvider.suppliers.any((s) => s.id == _supplierId) ? _supplierId : null,
                                   decoration: _decoration('Nhà cung cấp'),
                                   items: [
                                     const DropdownMenuItem<int?>(value: null, child: Text('Chọn nhà cung cấp')),
@@ -518,9 +516,9 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                             ],
                           ),
                           const SizedBox(height: 14),
-                          if (widget.editMode)
+                          if (widget.editMode && !_prefillLoading)
                             DropdownButtonFormField<int>(
-                              value: _statusId,
+                              value: _statusId == 1 || _statusId == 2 ? _statusId : 1,
                               decoration: _decoration('Trạng thái', required: true),
                               items: const [
                                 DropdownMenuItem(value: 1, child: Text('Active')),

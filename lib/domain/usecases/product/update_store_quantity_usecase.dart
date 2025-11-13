@@ -5,7 +5,7 @@ class UpdateStoreQuantityUseCase {
   final ProductRepository repository;
   UpdateStoreQuantityUseCase(this.repository);
 
-  Future<StoreQuantity?> call(int productId, int storeId, int quantity) =>
-      repository.updateStoreQuantity(productId, storeId, quantity);
+  Future<StoreQuantity?> call(int productId, int storeId, int quantity, {String? storeName}) =>
+      repository.updateStoreQuantity(productId, storeId, quantity, storeName: storeName);
 }
 

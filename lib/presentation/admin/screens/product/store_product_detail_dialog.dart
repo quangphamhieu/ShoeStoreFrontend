@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../domain/entities/product.dart';
 import '../../provider/product_provider.dart';
 import '../../provider/store_provider.dart';
-import 'package:shoestorefe/domain/entities/product.dart';
 import 'store_quantity_form_dialog.dart';
 
 class StoreProductDetailDialog extends StatefulWidget {
