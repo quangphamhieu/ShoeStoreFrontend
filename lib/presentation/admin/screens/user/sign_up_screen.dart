@@ -27,7 +27,8 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: "Nam",
+                // use provider.gender to set initial shown value instead of hard-coded string
+                value: provider.gender == 0 ? "Nam" : "Nữ",
                 items: const [
                   DropdownMenuItem(value: 'Nam', child: Text('Nam')),
                   DropdownMenuItem(value: 'Nữ', child: Text('Nữ')),

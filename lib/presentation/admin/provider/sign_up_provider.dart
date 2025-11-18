@@ -11,8 +11,7 @@ class SignUpProvider extends ChangeNotifier {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  int? gender;
-
+  int gender = 0;
 
   bool isLoading = false;
   String? error;
@@ -45,12 +44,13 @@ class SignUpProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      // ensure we never pass null for email (use empty string if not provided)
       user = await signupUserUseCases.call(
         fullName: name,
-        email: email.isNotEmpty ? email : null,
+        email: email.isNotEmpty ? email : '',
         phone: phone,
         password: password,
-        gender: gender ?? 0,
+        gender: gender,
       );
     } catch (e) {
       error = e.toString();

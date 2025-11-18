@@ -1,7 +1,6 @@
 import '../../domain/entities/supplier.dart';
 import '../../domain/repositories/supplier_repository.dart';
 import '../datasources/supplier_remote_data_source.dart';
-import '../models/supplier_model.dart';
 
 class SupplierRepositoryImpl implements SupplierRepository {
   final SupplierRemoteDataSource remote;

@@ -48,19 +48,7 @@ class LoginScreen extends StatelessWidget {
                           labelText: "Mật khẩu",
                           border: OutlineInputBorder(),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Checkbox(value: true, onChanged: (_) {}),
-                          const Text("Lưu đăng nhập"),
-                          const Spacer(),
-                          TextButton(
-                            onPressed: () {},
-                            child: const Text("Quên mật khẩu?"),
-                          ),
-                        ],
-                      ),
+                      ),                
                       const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,

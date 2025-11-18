@@ -13,6 +13,7 @@ import 'package:shoestorefe/domain/usecases/user/sign_up.dart';
 import 'package:shoestorefe/domain/usecases/user/update_user.dart';
 import 'package:shoestorefe/presentation/admin/provider/login_provider.dart';
 import 'package:shoestorefe/presentation/admin/provider/sign_up_provider.dart';
+import 'package:shoestorefe/presentation/admin/provider/user_provider.dart';
 import 'core/network/api_client.dart';
 import 'data/datasources/brand_remote_data_source.dart';
 import 'data/datasources/store_remote_data_source.dart';
@@ -156,6 +157,13 @@ Future<void> init() async {
   // Provider: register factory so each provider instance created by provider package is new if needed
   sl.registerFactory(() => SignUpProvider(sl()));
   sl.registerFactory(() => LoginProvider(sl()));
+  sl.registerFactory(() => UserProvider(
+        getAllUsers: sl(),
+        getUserById: sl(),
+        createUserUc: sl(),
+        updateUserUc: sl(),
+        deleteUserUc: sl(),
+      ));
   sl.registerFactory(() => BrandProvider(
         getAllUseCase: sl(),
         getByIdUseCase: sl(),

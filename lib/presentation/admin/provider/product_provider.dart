@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../domain/entities/product.dart';
-import '../../../domain/entities/store_quantity.dart';
 import '../../../domain/usecases/product/get_all_products_usecase.dart';
 import '../../../domain/usecases/product/get_product_by_id_usecase.dart';
 import '../../../domain/usecases/product/create_product_usecase.dart';

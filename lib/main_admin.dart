@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoestorefe/presentation/admin/provider/login_provider.dart';
 import 'package:shoestorefe/presentation/admin/provider/sign_up_provider.dart';
+import 'package:shoestorefe/presentation/admin/provider/user_provider.dart';
 import 'injection_container.dart' as di;
 import 'presentation/routes/app_router.dart';
 import 'presentation/admin/provider/brand_provider.dart';
@@ -36,6 +37,7 @@ class AdminApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => di.sl<NotificationProvider>()),
         ChangeNotifierProvider(create: (_) => MenuProvider()),
         ChangeNotifierProvider(create: (_) => di.sl<SignUpProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<UserProvider>()),
       ],
       child: MaterialApp.router(
         title: 'ShoeStore Admin',

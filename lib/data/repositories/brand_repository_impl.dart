@@ -1,7 +1,6 @@
 import '../../domain/entities/brand.dart';
 import '../../domain/repositories/brand_repository.dart';
 import '../datasources/brand_remote_data_source.dart';
-import '../models/brand_model.dart';
 
 class BrandRepositoryImpl implements BrandRepository {
   final BrandRemoteDataSource remote;

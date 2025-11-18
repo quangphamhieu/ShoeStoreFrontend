@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../domain/entities/product.dart';
-import '../../../../domain/entities/receipt_detail.dart';
 import '../../provider/receipt_provider.dart';
 import '../../provider/product_provider.dart';
 import '../../provider/supplier_provider.dart';

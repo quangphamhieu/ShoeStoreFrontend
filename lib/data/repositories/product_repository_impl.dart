@@ -2,7 +2,6 @@ import '../../domain/entities/product.dart';
 import '../../domain/entities/store_quantity.dart';
 import '../../domain/repositories/product_repository.dart';
 import '../datasources/product_remote_data_source.dart';
-import '../models/product_model.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final ProductRemoteDataSource remote;
