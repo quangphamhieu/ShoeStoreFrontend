@@ -10,6 +10,7 @@ import '../admin/screens/receipt/receipt_screen.dart';
 import '../admin/screens/store/store_screen.dart';
 import '../admin/screens/promotion/promotion_screen.dart';
 import '../admin/screens/user/login_screen.dart';
+import '../customer/screens/home_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: "/",
@@ -27,5 +28,8 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/user', builder: (_, __) => const UserScreen()),
 
   ],
+);
+final GoRouter customerRouter = GoRouter(
+  routes: [GoRoute(path: '/', builder: (_, __) => const HomeScreen())],
 );
 

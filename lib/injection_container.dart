@@ -86,6 +86,7 @@ import 'presentation/admin/provider/promotion_provider.dart';
 import 'presentation/admin/provider/receipt_provider.dart';
 import 'presentation/admin/provider/notification_provider.dart';
 import 'presentation/admin/provider/order_provider.dart';
+import 'presentation/customer/provider/customer_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -229,4 +230,10 @@ Future<void> init() async {
         getAllUseCase: sl(),
         updateStatusUseCase: sl(),
       ));
+  sl.registerFactory(
+    () => CustomerProvider(
+      getAllProductsUseCase: sl(),
+      searchProductsUseCase: sl(),
+    ),
+  );
 }
