@@ -10,6 +10,7 @@ import 'presentation/admin/provider/product_provider.dart';
 import 'presentation/admin/provider/promotion_provider.dart';
 import 'presentation/admin/provider/receipt_provider.dart';
 import 'presentation/admin/provider/notification_provider.dart';
+import 'presentation/admin/provider/order_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,7 @@ class AdminApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => di.sl<PromotionProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<ReceiptProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<NotificationProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<OrderProvider>()),
         ChangeNotifierProvider(create: (_) => MenuProvider()),
       ],
       child: MaterialApp.router(
