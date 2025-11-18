@@ -1,5 +1,18 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:shoestorefe/data/datasources/user_remote_data_source.dart';
+import 'package:shoestorefe/data/repositories/user_repository_impl.dart';
+import 'package:shoestorefe/domain/repositories/user_repository.dart';
+import 'package:shoestorefe/domain/usecases/user/create_user.dart';
+import 'package:shoestorefe/domain/usecases/user/delete_user.dart';
+import 'package:shoestorefe/domain/usecases/user/get_all_user.dart';
+import 'package:shoestorefe/domain/usecases/user/get_user_by_id.dart';
+import 'package:shoestorefe/domain/usecases/user/login.dart';
+import 'package:shoestorefe/domain/usecases/user/reset_password.dart';
+import 'package:shoestorefe/domain/usecases/user/sign_up.dart';
+import 'package:shoestorefe/domain/usecases/user/update_user.dart';
+import 'package:shoestorefe/presentation/admin/provider/login_provider.dart';
+import 'package:shoestorefe/presentation/admin/provider/sign_up_provider.dart';
 import 'core/network/api_client.dart';
 import 'data/datasources/brand_remote_data_source.dart';
 import 'data/datasources/store_remote_data_source.dart';
@@ -74,6 +87,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ApiClient(dio: Dio()));
 
   // Data source
+  sl.registerLazySingleton(() => UserRemoteDataSource(sl()));
   sl.registerLazySingleton(() => BrandRemoteDataSource(sl()));
   sl.registerLazySingleton(() => StoreRemoteDataSource(sl()));
   sl.registerLazySingleton(() => SupplierRemoteDataSource(sl()));
@@ -83,6 +97,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => NotificationRemoteDataSource(sl()));
 
   // Repository
+  sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(sl()));
   sl.registerLazySingleton<BrandRepository>(() => BrandRepositoryImpl(sl()));
   sl.registerLazySingleton<StoreRepository>(() => StoreRepositoryImpl(sl()));
   sl.registerLazySingleton<SupplierRepository>(() => SupplierRepositoryImpl(sl()));
@@ -92,6 +107,14 @@ Future<void> init() async {
   sl.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(sl()));
 
   // Usecases
+  sl.registerLazySingleton(() => GetAllUsers(sl()));
+  sl.registerLazySingleton(() => GetUserById(sl()));
+  sl.registerLazySingleton(() => CreateUser(sl()));
+  sl.registerLazySingleton(() => UpdateUser(sl()));
+  sl.registerLazySingleton(() => DeleteUser(sl()));
+  sl.registerLazySingleton(() => LoginUser(sl()));
+  sl.registerLazySingleton(() => SignupUser(sl()));
+  sl.registerLazySingleton(() => ResetPassword(sl()));
   sl.registerLazySingleton(() => GetAllBrandsUseCase(sl()));
   sl.registerLazySingleton(() => GetBrandByIdUseCase(sl()));
   sl.registerLazySingleton(() => CreateBrandUseCase(sl()));
@@ -131,6 +154,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DeleteNotificationUseCase(sl()));
 
   // Provider: register factory so each provider instance created by provider package is new if needed
+  sl.registerFactory(() => SignUpProvider(sl()));
+  sl.registerFactory(() => LoginProvider(sl()));
   sl.registerFactory(() => BrandProvider(
         getAllUseCase: sl(),
         getByIdUseCase: sl(),
