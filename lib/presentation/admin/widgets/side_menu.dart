@@ -11,9 +11,8 @@ class SideMenu extends StatelessWidget {
     final menuProvider = Provider.of<MenuProvider>(context);
     final selected = menuProvider.selectedMenu;
 
-    // ✅ Khai báo rõ kiểu Map để tránh lỗi Object -> String
     final List<Map<String, dynamic>> items = [
-      {'icon': Icons.dashboard_outlined, 'title': 'Bảng điều khiển', 'route': '/'},
+      {'icon': Icons.dashboard_outlined, 'title': 'Bảng điều khiển', 'route': '/dashboard'},
       {'icon': Icons.people_outline, 'title': 'Người dùng', 'route': '/user'},
       {'icon': Icons.store_outlined, 'title': 'Cửa hàng', 'route': '/store'},
       {'icon': Icons.branding_watermark_outlined, 'title': 'Thương hiệu', 'route': '/brand'},
@@ -22,6 +21,7 @@ class SideMenu extends StatelessWidget {
       {'icon': Icons.receipt_long_outlined, 'title': 'Phiếu nhập', 'route': '/receipt'},
       {'icon': Icons.local_offer_outlined, 'title': 'Khuyến mãi', 'route': '/promotion'},
       {'icon': Icons.supervised_user_circle_outlined, 'title': 'Nhà cung cấp', 'route': '/supplier'},
+      {'icon': Icons.logout, 'title': 'Đăng xuất', 'route': '/'},
     ];
 
     return Container(
