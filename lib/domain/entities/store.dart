@@ -17,5 +17,3 @@ class Store {
     required this.createdAt,
   });
 }
-
-

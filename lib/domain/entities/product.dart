@@ -33,4 +33,3 @@ class Product {
     this.stores = const [],
   });
 }
-

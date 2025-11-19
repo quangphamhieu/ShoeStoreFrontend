@@ -24,4 +24,3 @@ class Promotion {
     required this.stores,
   });
 }
-

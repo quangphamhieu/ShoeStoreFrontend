@@ -45,28 +45,33 @@ class _ProductScreenState extends State<ProductScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const ProductToolbar(),
-                    const SizedBox(height: 24),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 25,
-                              offset: const Offset(0, 12),
-                            ),
-                          ],
-                        ),
-                        child: provider.isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : SingleChildScrollView(
-                                padding: const EdgeInsets.all(20),
-                                child: ProductTable(products: provider.filteredProducts),
+                          const SizedBox(height: 24),
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(18),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.05),
+                                    blurRadius: 25,
+                                    offset: const Offset(0, 12),
+                                  ),
+                                ],
                               ),
-                      ),
-                    ),
+                              child:
+                                  provider.isLoading
+                                      ? const Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                      : SingleChildScrollView(
+                                        padding: const EdgeInsets.all(20),
+                                        child: ProductTable(
+                                          products: provider.filteredProducts,
+                                        ),
+                                      ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -80,4 +85,3 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 }
-

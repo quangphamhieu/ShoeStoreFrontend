@@ -7,4 +7,3 @@ class GetPromotionByIdUseCase {
 
   Future<Promotion?> call(int id) => repository.getById(id);
 }
-

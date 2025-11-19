@@ -6,7 +6,8 @@ abstract class ReceiptRepository {
   Future<Receipt> create({
     required int supplierId,
     int? storeId,
-    required List<Map<String, dynamic>> details, // [{productId, quantityOrdered}]
+    required List<Map<String, dynamic>>
+    details, // [{productId, quantityOrdered}]
   });
   Future<Receipt?> updateInfo(
     int id, {
@@ -16,8 +17,8 @@ abstract class ReceiptRepository {
   });
   Future<Receipt?> updateReceived(
     int id, {
-    required List<Map<String, dynamic>> details, // [{receiptDetailId, receivedQuantity}]
+    required List<Map<String, dynamic>>
+    details, // [{receiptDetailId, receivedQuantity}]
   });
   Future<bool> delete(int id);
 }
-

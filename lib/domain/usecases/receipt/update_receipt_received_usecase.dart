@@ -8,10 +8,5 @@ class UpdateReceiptReceivedUseCase {
   Future<Receipt?> call(
     int id, {
     required List<Map<String, dynamic>> details,
-  }) =>
-      repository.updateReceived(
-        id,
-        details: details,
-      );
+  }) => repository.updateReceived(id, details: details);
 }
-

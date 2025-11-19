@@ -54,7 +54,11 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
     super.dispose();
   }
 
-  InputDecoration _inputDecoration(String label, {String? hint, bool required = false}) {
+  InputDecoration _inputDecoration(
+    String label, {
+    String? hint,
+    bool required = false,
+  }) {
     final suffix = required ? ' *' : '';
     return InputDecoration(
       labelText: '$label$suffix',
@@ -93,13 +97,20 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
         children: [
           TextFormField(
             controller: _codeController,
-            decoration: _inputDecoration('Mã nhà cung cấp', hint: 'Nhập mã định danh'),
+            decoration: _inputDecoration(
+              'Mã nhà cung cấp',
+              hint: 'Nhập mã định danh',
+            ),
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 14),
           TextFormField(
             controller: _nameController,
-            decoration: _inputDecoration('Tên nhà cung cấp', hint: 'Nhập tên nhà cung cấp', required: true),
+            decoration: _inputDecoration(
+              'Tên nhà cung cấp',
+              hint: 'Nhập tên nhà cung cấp',
+              required: true,
+            ),
             textInputAction: TextInputAction.next,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
@@ -113,7 +124,10 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
             controller: _contactInfoController,
             maxLines: 3,
             textInputAction: TextInputAction.newline,
-            decoration: _inputDecoration('Thông tin liên hệ', hint: 'Email, số điện thoại, địa chỉ...'),
+            decoration: _inputDecoration(
+              'Thông tin liên hệ',
+              hint: 'Email, số điện thoại, địa chỉ...',
+            ),
           ),
           const SizedBox(height: 14),
           if (widget.editMode)
@@ -173,7 +187,11 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(widget.editMode ? 'Cập nhật thất bại' : 'Tạo mới thất bại')),
+        SnackBar(
+          content: Text(
+            widget.editMode ? 'Cập nhật thất bại' : 'Tạo mới thất bại',
+          ),
+        ),
       );
     }
   }
@@ -210,8 +228,13 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.editMode ? 'Cập nhật nhà cung cấp' : 'Thêm nhà cung cấp mới',
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                          widget.editMode
+                              ? 'Cập nhật nhà cung cấp'
+                              : 'Thêm nhà cung cấp mới',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -222,7 +245,10 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                     ),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      icon: const Icon(Icons.close_rounded, color: Color(0xFF94A3B8)),
+                      icon: const Icon(
+                        Icons.close_rounded,
+                        color: Color(0xFF94A3B8),
+                      ),
                       tooltip: 'Đóng',
                     ),
                   ],
@@ -240,25 +266,52 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: _loading ? null : () => Navigator.of(context).pop(false),
+                      onPressed:
+                          _loading
+                              ? null
+                              : () => Navigator.of(context).pop(false),
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 14,
+                        ),
                         foregroundColor: const Color(0xFF64748B),
                       ),
                       child: const Text('Hủy'),
                     ),
                     const SizedBox(width: 14),
                     ElevatedButton(
-                      onPressed: _prefillLoading ? null : () => _handleSubmit(context),
+                      onPressed:
+                          _prefillLoading ? null : () => _handleSubmit(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: widget.editMode ? const Color(0xFF87CEEB) : const Color(0xFF2563EB),
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        backgroundColor:
+                            widget.editMode
+                                ? const Color(0xFF87CEEB)
+                                : const Color(0xFF2563EB),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 14,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                         elevation: 0,
                       ),
-                      child: _loading
-                          ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                          : Text(widget.editMode ? 'Lưu thay đổi' : 'Tạo nhà cung cấp'),
+                      child:
+                          _loading
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                              : Text(
+                                widget.editMode
+                                    ? 'Lưu thay đổi'
+                                    : 'Tạo nhà cung cấp',
+                              ),
                     ),
                   ],
                 ),
@@ -270,4 +323,3 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
     );
   }
 }
-

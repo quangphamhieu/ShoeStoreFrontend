@@ -10,7 +10,9 @@ class BrandRemoteDataSource {
     final response = await client.get(ApiEndpoint.brands);
     final data = response.data;
     if (data is List) {
-      return data.map((e) => BrandModel.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => BrandModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
@@ -24,17 +26,23 @@ class BrandRemoteDataSource {
     return null;
   }
 
-  Future<BrandModel> create(String name, {String? code, String? description}) async {
-    final body = {
-      'code': code,
-      'name': name,
-      'description': description,
-    };
+  Future<BrandModel> create(
+    String name, {
+    String? code,
+    String? description,
+  }) async {
+    final body = {'code': code, 'name': name, 'description': description};
     final response = await client.post(ApiEndpoint.brands, body);
     return BrandModel.fromJson(response.data as Map<String, dynamic>);
   }
 
-  Future<BrandModel?> update(int id, {required String name, String? code, String? description, required int statusId}) async {
+  Future<BrandModel?> update(
+    int id, {
+    required String name,
+    String? code,
+    String? description,
+    required int statusId,
+  }) async {
     final body = {
       'code': code,
       'name': name,

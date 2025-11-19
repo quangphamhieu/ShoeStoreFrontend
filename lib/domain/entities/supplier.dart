@@ -13,4 +13,3 @@ class Supplier {
     required this.statusId,
   });
 }
-

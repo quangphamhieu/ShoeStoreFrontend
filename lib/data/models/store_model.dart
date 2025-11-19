@@ -10,39 +10,40 @@ class StoreModel extends Store {
     required int statusId,
     required DateTime createdAt,
   }) : super(
-          id: id,
-          code: code,
-          name: name,
-          address: address,
-          phone: phone,
-          statusId: statusId,
-          createdAt: createdAt,
-        );
+         id: id,
+         code: code,
+         name: name,
+         address: address,
+         phone: phone,
+         statusId: statusId,
+         createdAt: createdAt,
+       );
 
   factory StoreModel.fromJson(Map<String, dynamic> json) => StoreModel(
-        id: json['id'] as int,
-        code: json['code'] as String?,
-        name: json['name'] as String,
-        address: json['address'] as String?,
-        phone: json['phone'] as String?,
-        statusId: json['statusId'] as int? ?? 1,
-        createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt'] as String) : DateTime.now(),
-      );
+    id: json['id'] as int,
+    code: json['code'] as String?,
+    name: json['name'] as String,
+    address: json['address'] as String?,
+    phone: json['phone'] as String?,
+    statusId: json['statusId'] as int? ?? 1,
+    createdAt:
+        json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'] as String)
+            : DateTime.now(),
+  );
 
   Map<String, dynamic> toCreateJson() => {
-        'code': code,
-        'name': name,
-        'address': address,
-        'phone': phone,
-      };
+    'code': code,
+    'name': name,
+    'address': address,
+    'phone': phone,
+  };
 
   Map<String, dynamic> toUpdateJson(int statusId) => {
-        'code': code,
-        'name': name,
-        'address': address,
-        'phone': phone,
-        'statusId': statusId,
-      };
+    'code': code,
+    'name': name,
+    'address': address,
+    'phone': phone,
+    'statusId': statusId,
+  };
 }
-
-

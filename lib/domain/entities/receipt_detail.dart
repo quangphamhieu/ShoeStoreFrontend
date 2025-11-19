@@ -17,4 +17,3 @@ class ReceiptDetail {
     required this.unitPrice,
   });
 }
-

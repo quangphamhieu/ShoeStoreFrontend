@@ -9,7 +9,8 @@ class StoreProductDetailDialog extends StatefulWidget {
   const StoreProductDetailDialog({super.key});
 
   @override
-  State<StoreProductDetailDialog> createState() => _StoreProductDetailDialogState();
+  State<StoreProductDetailDialog> createState() =>
+      _StoreProductDetailDialogState();
 }
 
 class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
@@ -66,7 +67,10 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
 
         return Dialog(
           backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 24,
+          ),
           child: SingleChildScrollView(
             child: Container(
               constraints: const BoxConstraints(maxWidth: 800),
@@ -94,12 +98,18 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                         children: [
                           Text(
                             'Chi tiết số lượng tồn kho',
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             'Sản phẩm: ${product.name}',
-                            style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
+                            style: const TextStyle(
+                              color: Color(0xFF94A3B8),
+                              fontSize: 14,
+                            ),
                           ),
                         ],
                       ),
@@ -109,15 +119,20 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                             onPressed: () async {
                               final success = await showDialog<bool>(
                                 context: context,
-                                builder: (_) => StoreQuantityFormDialog(
-                                  productId: productId,
-                                  editMode: false,
-                                  initialSalePrice: product.originalPrice,
-                                ),
+                                builder:
+                                    (_) => StoreQuantityFormDialog(
+                                      productId: productId,
+                                      editMode: false,
+                                      initialSalePrice: product.originalPrice,
+                                    ),
                               );
                               if (success == true && mounted) {
                                 _reloadProduct();
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Thêm số lượng thành công')));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Thêm số lượng thành công'),
+                                  ),
+                                );
                               }
                             },
                             icon: const Icon(Icons.add, size: 18),
@@ -125,15 +140,23 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF90EE90),
                               foregroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
                               elevation: 0,
                             ),
                           ),
                           const SizedBox(width: 12),
                           IconButton(
                             onPressed: () => Navigator.of(context).pop(),
-                            icon: const Icon(Icons.close_rounded, color: Color(0xFF94A3B8)),
+                            icon: const Icon(
+                              Icons.close_rounded,
+                              color: Color(0xFF94A3B8),
+                            ),
                           ),
                         ],
                       ),
@@ -157,7 +180,12 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                               topRight: Radius.circular(14),
                             ),
                             border: Border(
-                              bottom: BorderSide(color: stores.isEmpty ? Colors.transparent : const Color(0xFFE2E8F0)),
+                              bottom: BorderSide(
+                                color:
+                                    stores.isEmpty
+                                        ? Colors.transparent
+                                        : const Color(0xFFE2E8F0),
+                              ),
                             ),
                           ),
                           child: Row(
@@ -166,21 +194,30 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                                 flex: 2,
                                 child: Text(
                                   'Cửa hàng',
-                                  style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1F2933)),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF1F2933),
+                                  ),
                                 ),
                               ),
                               Expanded(
                                 child: Text(
                                   'Số lượng',
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1F2933)),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF1F2933),
+                                  ),
                                 ),
                               ),
                               Expanded(
                                 child: Text(
                                   'Giá bán',
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1F2933)),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF1F2933),
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 100),
@@ -193,88 +230,128 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                             child: Center(
                               child: Text(
                                 'Chưa có thông tin số lượng tại cửa hàng nào',
-                                style: const TextStyle(color: Color(0xFF94A3B8)),
+                                style: const TextStyle(
+                                  color: Color(0xFF94A3B8),
+                                ),
                               ),
                             ),
                           )
                         else
-                          ...stores.map((store) => Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: stores.indexOf(store) < stores.length - 1
-                                      ? const Color(0xFFE2E8F0)
-                                      : Colors.transparent,
-                                ),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    store.storeName,
-                                    style: const TextStyle(color: Color(0xFF334155)),
+                          ...stores.map(
+                            (store) => Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color:
+                                        stores.indexOf(store) <
+                                                stores.length - 1
+                                            ? const Color(0xFFE2E8F0)
+                                            : Colors.transparent,
                                   ),
                                 ),
-                                Expanded(
-                                  child: Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                      decoration: BoxDecoration(
-                                        color: store.quantity > 0 ? const Color(0xFFEFFAF3) : const Color(0xFFFFF1F2),
-                                        borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      store.storeName,
+                                      style: const TextStyle(
+                                        color: Color(0xFF334155),
                                       ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Center(
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 6,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              store.quantity > 0
+                                                  ? const Color(0xFFEFFAF3)
+                                                  : const Color(0xFFFFF1F2),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          store.quantity.toString(),
+                                          style: TextStyle(
+                                            color:
+                                                store.quantity > 0
+                                                    ? const Color(0xFF0F9D58)
+                                                    : const Color(0xFFDC2626),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Center(
                                       child: Text(
-                                        store.quantity.toString(),
-                                        style: TextStyle(
-                                          color: store.quantity > 0 ? const Color(0xFF0F9D58) : const Color(0xFFDC2626),
+                                        '${store.salePrice.toStringAsFixed(0)} đ',
+                                        style: const TextStyle(
+                                          color: Color(0xFF334155),
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      '${store.salePrice.toStringAsFixed(0)} đ',
-                                      style: const TextStyle(color: Color(0xFF334155), fontWeight: FontWeight.w600),
+                                  SizedBox(
+                                    width: 100,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            final success = await showDialog<
+                                              bool
+                                            >(
+                                              context: context,
+                                              builder:
+                                                  (_) =>
+                                                      StoreQuantityFormDialog(
+                                                        productId: productId,
+                                                        storeId: store.storeId,
+                                                        initialQuantity:
+                                                            store.quantity,
+                                                        initialSalePrice:
+                                                            store.salePrice,
+                                                        editMode: true,
+                                                      ),
+                                            );
+                                            if (success == true && mounted) {
+                                              _reloadProduct();
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    'Cập nhật số lượng thành công',
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          icon: const Icon(
+                                            Icons.edit_outlined,
+                                            color: Color(0xFF2563EB),
+                                            size: 20,
+                                          ),
+                                          tooltip: 'Sửa',
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 100,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () async {
-                                          final success = await showDialog<bool>(
-                                            context: context,
-                                            builder: (_) => StoreQuantityFormDialog(
-                                              productId: productId,
-                                              storeId: store.storeId,
-                                              initialQuantity: store.quantity,
-                                              initialSalePrice: store.salePrice,
-                                              editMode: true,
-                                            ),
-                                          );
-                                          if (success == true && mounted) {
-                                            _reloadProduct();
-                                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cập nhật số lượng thành công')));
-                                          }
-                                        },
-                                        icon: const Icon(Icons.edit_outlined, color: Color(0xFF2563EB), size: 20),
-                                        tooltip: 'Sửa',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          )),
+                          ),
                       ],
                     ),
                   ),
@@ -286,8 +363,13 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
                         onPressed: () => Navigator.of(context).pop(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2563EB),
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 14,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
                           elevation: 0,
                         ),
                         child: const Text('Đóng'),
@@ -303,4 +385,3 @@ class _StoreProductDetailDialogState extends State<StoreProductDetailDialog> {
     );
   }
 }
-

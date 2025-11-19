@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../provider/order_provider.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/side_menu.dart';
+import 'order_detail_panel.dart';
 import 'order_table.dart';
 import 'order_toolbar.dart';
 
@@ -57,14 +58,31 @@ class _OrderScreenState extends State<OrderScreen> {
                                   ),
                                 ],
                               ),
-                              child: provider.isLoading
-                                  ? const Center(child: CircularProgressIndicator())
-                                  : provider.filteredOrders.isEmpty
-                                      ? const Center(child: Text('Không có đơn hàng nào.'))
+                              child:
+                                  provider.isLoading
+                                      ? const Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                      : provider.filteredOrders.isEmpty
+                                      ? const Center(
+                                        child: Text('Không có đơn hàng nào.'),
+                                      )
                                       : SingleChildScrollView(
-                                          padding: const EdgeInsets.all(20),
-                                          child: OrderTable(orders: provider.filteredOrders),
+                                        padding: const EdgeInsets.all(20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            OrderTable(
+                                              orders: provider.filteredOrders,
+                                            ),
+                                            if (provider.selectedOrder != null)
+                                              OrderDetailPanel(
+                                                order: provider.selectedOrder!,
+                                              ),
+                                          ],
                                         ),
+                                      ),
                             ),
                           ),
                         ],

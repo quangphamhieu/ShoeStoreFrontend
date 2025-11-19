@@ -10,7 +10,9 @@ class SupplierRemoteDataSource {
     final response = await client.get(ApiEndpoint.suppliers);
     final data = response.data;
     if (data is List) {
-      return data.map((e) => SupplierModel.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => SupplierModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
@@ -24,17 +26,23 @@ class SupplierRemoteDataSource {
     return null;
   }
 
-  Future<SupplierModel> create(String name, {String? code, String? contactInfo}) async {
-    final body = {
-      'code': code,
-      'name': name,
-      'contactInfo': contactInfo,
-    };
+  Future<SupplierModel> create(
+    String name, {
+    String? code,
+    String? contactInfo,
+  }) async {
+    final body = {'code': code, 'name': name, 'contactInfo': contactInfo};
     final response = await client.post(ApiEndpoint.suppliers, body);
     return SupplierModel.fromJson(response.data as Map<String, dynamic>);
   }
 
-  Future<SupplierModel?> update(int id, {required String name, String? code, String? contactInfo, required int statusId}) async {
+  Future<SupplierModel?> update(
+    int id, {
+    required String name,
+    String? code,
+    String? contactInfo,
+    required int statusId,
+  }) async {
     final body = {
       'code': code,
       'name': name,
@@ -54,4 +62,3 @@ class SupplierRemoteDataSource {
     return response.statusCode == 204 || response.statusCode == 200;
   }
 }
-

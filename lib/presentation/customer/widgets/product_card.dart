@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../domain/entities/store_quantity.dart';
 import '../provider/customer_provider.dart';
 
 class ProductCard extends StatefulWidget {
@@ -17,11 +18,18 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     final product = widget.productGroup.representative;
 
-    // Get the sale price from first store if available
-    final salePrice =
-        product.stores.isNotEmpty
-            ? product.stores.first.salePrice
-            : product.originalPrice;
+    // Get the sale price from warehouse store (id = 1) if available
+    StoreQuantity? warehouseEntry;
+    if (product.stores.isNotEmpty) {
+      try {
+        warehouseEntry = product.stores.firstWhere(
+          (store) => store.storeId == CustomerProvider.warehouseStoreId,
+        );
+      } catch (_) {
+        warehouseEntry = product.stores.first;
+      }
+    }
+    final salePrice = warehouseEntry?.salePrice ?? product.originalPrice;
 
     final hasDiscount = salePrice < product.originalPrice;
     final discountPercent =

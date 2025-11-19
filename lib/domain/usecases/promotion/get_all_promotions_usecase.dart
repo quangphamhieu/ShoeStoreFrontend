@@ -7,4 +7,3 @@ class GetAllPromotionsUseCase {
 
   Future<List<Promotion>> call() => repository.getAll();
 }
-

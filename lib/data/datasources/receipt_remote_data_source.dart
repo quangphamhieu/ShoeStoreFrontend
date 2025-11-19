@@ -10,7 +10,9 @@ class ReceiptRemoteDataSource {
     final response = await client.get(ApiEndpoint.receipts);
     final data = response.data;
     if (data is List) {
-      return data.map((e) => ReceiptModel.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => ReceiptModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
@@ -25,12 +27,18 @@ class ReceiptRemoteDataSource {
   }
 
   Future<ReceiptModel> create(ReceiptModel receipt) async {
-    final response = await client.post(ApiEndpoint.receipts, receipt.toCreateJson());
+    final response = await client.post(
+      ApiEndpoint.receipts,
+      receipt.toCreateJson(),
+    );
     return ReceiptModel.fromJson(response.data as Map<String, dynamic>);
   }
 
   Future<ReceiptModel?> updateInfo(int id, ReceiptModel receipt) async {
-    final response = await client.put('${ApiEndpoint.receipts}/$id/info', receipt.toUpdateJson());
+    final response = await client.put(
+      '${ApiEndpoint.receipts}/$id/info',
+      receipt.toUpdateJson(),
+    );
     final data = response.data;
     if (data is Map<String, dynamic>) {
       return ReceiptModel.fromJson(data);
@@ -39,7 +47,10 @@ class ReceiptRemoteDataSource {
   }
 
   Future<ReceiptModel?> updateReceived(int id, ReceiptModel receipt) async {
-    final response = await client.put('${ApiEndpoint.receipts}/$id/receive', receipt.toUpdateReceivedJson());
+    final response = await client.put(
+      '${ApiEndpoint.receipts}/$id/receive',
+      receipt.toUpdateReceivedJson(),
+    );
     final data = response.data;
     if (data is Map<String, dynamic>) {
       return ReceiptModel.fromJson(data);
@@ -52,4 +63,3 @@ class ReceiptRemoteDataSource {
     return response.statusCode == 204 || response.statusCode == 200;
   }
 }
-

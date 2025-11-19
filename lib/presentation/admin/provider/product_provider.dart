@@ -42,15 +42,19 @@ class ProductProvider extends ChangeNotifier {
   String _search = '';
   String get search => _search;
 
+  // Admin: Hiển thị TẤT CẢ products (không group, mỗi size/màu là 1 product riêng)
   List<Product> get filteredProducts {
     if (_search.isEmpty) return _products;
     final q = _search.toLowerCase();
-    return _products.where((p) => 
-      p.name.toLowerCase().contains(q) || 
-      (p.sku ?? '').toLowerCase().contains(q) ||
-      (p.color ?? '').toLowerCase().contains(q) ||
-      (p.size ?? '').toLowerCase().contains(q)
-    ).toList();
+    return _products
+        .where(
+          (p) =>
+              p.name.toLowerCase().contains(q) ||
+              (p.sku ?? '').toLowerCase().contains(q) ||
+              (p.color ?? '').toLowerCase().contains(q) ||
+              (p.size ?? '').toLowerCase().contains(q),
+        )
+        .toList();
   }
 
   Future<void> loadAll() async {
@@ -166,9 +170,21 @@ class ProductProvider extends ChangeNotifier {
     return result;
   }
 
-  Future<bool> createStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
+  Future<bool> createStoreQuantity(
+    int productId,
+    int storeId,
+    int quantity, {
+    double? salePrice,
+    String? storeName,
+  }) async {
     try {
-      final result = await createStoreQuantityUseCase.call(productId, storeId, quantity, salePrice: salePrice, storeName: storeName);
+      final result = await createStoreQuantityUseCase.call(
+        productId,
+        storeId,
+        quantity,
+        salePrice: salePrice,
+        storeName: storeName,
+      );
       if (result != null) {
         await loadAll();
         return true;
@@ -179,9 +195,21 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
+  Future<bool> updateStoreQuantity(
+    int productId,
+    int storeId,
+    int quantity, {
+    double? salePrice,
+    String? storeName,
+  }) async {
     try {
-      final result = await updateStoreQuantityUseCase.call(productId, storeId, quantity, salePrice: salePrice, storeName: storeName);
+      final result = await updateStoreQuantityUseCase.call(
+        productId,
+        storeId,
+        quantity,
+        salePrice: salePrice,
+        storeName: storeName,
+      );
       if (result != null) {
         await loadAll();
         return true;
@@ -192,4 +220,3 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 }
-

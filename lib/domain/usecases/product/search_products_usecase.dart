@@ -11,13 +11,11 @@ class SearchProductsUseCase {
     String? size,
     double? minPrice,
     double? maxPrice,
-  }) =>
-      repository.search(
-        name: name,
-        color: color,
-        size: size,
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-      );
+  }) => repository.search(
+    name: name,
+    color: color,
+    size: size,
+    minPrice: minPrice,
+    maxPrice: maxPrice,
+  );
 }
-

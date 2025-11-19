@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import '../provider/customer_provider.dart';
+import 'package:shoestorefe/core/network/token_handler.dart';
+import 'package:shoestorefe/core/utils/auth_utils.dart';
 
 class CustomerHeader extends StatelessWidget {
   const CustomerHeader({super.key});
@@ -8,6 +11,8 @@ class CustomerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<CustomerProvider>();
+    final isLoggedIn = TokenHandler().hasToken();
+    final userName = isLoggedIn ? TokenHandler().getUserName() : null;
 
     return Container(
       height: 80,
@@ -129,9 +134,39 @@ class CustomerHeader extends StatelessWidget {
             ],
           ),
           const SizedBox(width: 8),
-          _buildHeaderButton('Đăng Nhập'),
-          const SizedBox(width: 6),
-          _buildHeaderButton('Đăng ký', isPrimary: true),
+          // Hiển thị user info và đăng xuất nếu đã đăng nhập
+          if (isLoggedIn && userName != null) ...[
+            Row(
+              children: [
+                Icon(Icons.person, size: 18, color: Colors.grey[700]),
+                const SizedBox(width: 6),
+                Text(
+                  userName,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 12),
+            GestureDetector(
+              onTap: () => AuthUtils.logout(context),
+              child: _buildHeaderButton('Đăng xuất'),
+            ),
+          ] else ...[
+            // Hiển thị đăng nhập/đăng ký nếu chưa đăng nhập
+            GestureDetector(
+              onTap: () => context.go('/'),
+              child: _buildHeaderButton('Đăng Nhập'),
+            ),
+            const SizedBox(width: 6),
+            GestureDetector(
+              onTap: () => context.go('/signup'),
+              child: _buildHeaderButton('Đăng ký', isPrimary: true),
+            ),
+          ],
         ],
       ),
     );

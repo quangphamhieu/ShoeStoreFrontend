@@ -6,5 +6,3 @@ class DeleteStoreUseCase {
 
   Future<bool> call(int id) => repository.delete(id);
 }
-
-

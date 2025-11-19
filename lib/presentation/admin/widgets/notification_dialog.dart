@@ -15,77 +15,77 @@ class NotificationPanel extends StatelessWidget {
       elevation: 8,
       borderRadius: BorderRadius.circular(16),
       shadowColor: Colors.black.withOpacity(0.2),
-        child: Container(
-          width: 420,
-          height: 600, // Chiều cao cố định
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
+      child: Container(
+        width: 420,
+        height: 600, // Chiều cao cố định
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+                ),
               ),
-            ],
-          ),
-          child: Column(
-            children: [
-              // Header
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+              child: const Row(
+                children: [
+                  Text(
+                    'Thông báo',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                   ),
-                ),
-                child: const Row(
-                  children: [
-                    Text(
-                      'Thông báo',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
+                ],
               ),
-              // Notifications list - scrollable
-              Expanded(
-                child: provider.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : provider.notifications.isEmpty
-                        ? const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text(
-                                'Không có thông báo nào',
-                                style: TextStyle(color: Color(0xFF94A3B8)),
-                              ),
-                            ),
-                          )
-                        : ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemCount: provider.notifications.length,
-                            separatorBuilder: (context, index) => const Divider(
+            ),
+            // Notifications list - scrollable
+            Expanded(
+              child:
+                  provider.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : provider.notifications.isEmpty
+                      ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Text(
+                            'Không có thông báo nào',
+                            style: TextStyle(color: Color(0xFF94A3B8)),
+                          ),
+                        ),
+                      )
+                      : ListView.separated(
+                        padding: EdgeInsets.zero,
+                        itemCount: provider.notifications.length,
+                        separatorBuilder:
+                            (context, index) => const Divider(
                               height: 1,
                               thickness: 0.3,
                               color: Color(0xFFE2E8F0),
                             ),
-                            itemBuilder: (context, index) {
-                              final notification = provider.notifications[index];
-                              final isUnread = provider.unreadNotifications.contains(notification);
-                              return _NotificationItem(
-                                notification: notification,
-                                isUnread: isUnread,
-                              );
-                            },
-                          ),
-              ),
-            ],
-          ),
+                        itemBuilder: (context, index) {
+                          final notification = provider.notifications[index];
+                          final isUnread = provider.unreadNotifications
+                              .contains(notification);
+                          return _NotificationItem(
+                            notification: notification,
+                            isUnread: isUnread,
+                          );
+                        },
+                      ),
+            ),
+          ],
         ),
+      ),
     );
   }
 }
@@ -94,10 +94,7 @@ class _NotificationItem extends StatelessWidget {
   final domain.Notification notification;
   final bool isUnread;
 
-  const _NotificationItem({
-    required this.notification,
-    required this.isUnread,
-  });
+  const _NotificationItem({required this.notification, required this.isUnread});
 
   String _getTypeIcon(String? type) {
     switch (type?.toLowerCase()) {
@@ -159,7 +156,10 @@ class _NotificationItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: isUnread ? FontWeight.w600 : FontWeight.w500,
-                    color: isUnread ? const Color(0xFF1F2933) : const Color(0xFF64748B),
+                    color:
+                        isUnread
+                            ? const Color(0xFF1F2933)
+                            : const Color(0xFF64748B),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -205,4 +205,3 @@ class _NotificationItem extends StatelessWidget {
     }
   }
 }
-

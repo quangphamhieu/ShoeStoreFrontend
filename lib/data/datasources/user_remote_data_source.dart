@@ -46,7 +46,10 @@ class UserRemoteDataSource {
     return response.statusCode == 200;
   }
 
-  Future<LoginResponseModel?> login(String phoneOrEmail, String password) async {
+  Future<LoginResponseModel?> login(
+    String phoneOrEmail,
+    String password,
+  ) async {
     final response = await client.post("${ApiEndpoint.user}/login", {
       "phoneOrEmail": phoneOrEmail,
       "password": password,
@@ -64,7 +67,10 @@ class UserRemoteDataSource {
   }
 
   Future<bool> resetPassword(Map<String, dynamic> body) async {
-    final response = await client.post("${ApiEndpoint.user}/reset-password", body);
+    final response = await client.post(
+      "${ApiEndpoint.user}/reset-password",
+      body,
+    );
     return response.statusCode == 200;
   }
 }

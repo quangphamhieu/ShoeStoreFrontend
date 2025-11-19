@@ -9,7 +9,3 @@ class GetAllOrdersUseCase {
     return await repository.getAll();
   }
 }
-
-
-
-

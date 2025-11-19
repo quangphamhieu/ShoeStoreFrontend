@@ -25,10 +25,7 @@ class OrderTable extends StatelessWidget {
     6: Color(0xFFDC2626),
   };
 
-  static const Map<int, String> typeLabels = {
-    0: 'Online',
-    1: 'Offline',
-  };
+  static const Map<int, String> typeLabels = {0: 'Online', 1: 'Offline'};
 
   static const Map<int, String> paymentLabels = {
     0: 'Tiền mặt',
@@ -48,10 +45,18 @@ class OrderTable extends StatelessWidget {
             child: DataTable(
               showCheckboxColumn: false,
               columnSpacing: 20,
-              headingTextStyle: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1F2933)),
-              dataTextStyle: const TextStyle(fontSize: 14, color: Color(0xFF334155)),
+              headingTextStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1F2933),
+              ),
+              dataTextStyle: const TextStyle(
+                fontSize: 14,
+                color: Color(0xFF334155),
+              ),
               dividerThickness: 0.3,
-              headingRowColor: MaterialStateProperty.all(const Color(0xFFF1F5F9)),
+              headingRowColor: MaterialStateProperty.all(
+                const Color(0xFFF1F5F9),
+              ),
               dataRowColor: MaterialStateProperty.resolveWith((states) {
                 if (states.contains(MaterialState.selected)) {
                   return const Color(0xFFEFF6FF);
@@ -69,59 +74,74 @@ class OrderTable extends StatelessWidget {
                 DataColumn(label: Text('Tổng tiền')),
                 DataColumn(label: Text('Ngày tạo')),
               ],
-              rows: orders.map((order) {
-                final selected = provider.isSelected(order.id);
-                return DataRow(
-                  selected: selected,
-                  onSelectChanged: (v) {
-                    if (v == true) {
-                      provider.selectOrder(order.id);
-                    } else {
-                      provider.selectOrder(null);
-                    }
-                  },
-                  cells: [
-                    DataCell(
-                      Center(
-                        child: Checkbox(
-                          value: selected,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                          onChanged: (v) {
-                            if (v == true) {
-                              provider.selectOrder(order.id);
-                            } else {
-                              provider.selectOrder(null);
-                            }
-                          },
+              rows:
+                  orders.map((order) {
+                    final selected = provider.isSelected(order.id);
+                    return DataRow(
+                      selected: selected,
+                      onSelectChanged: (v) {
+                        if (v == true) {
+                          provider.selectOrder(order.id);
+                        } else {
+                          provider.selectOrder(null);
+                        }
+                      },
+                      cells: [
+                        DataCell(
+                          Center(
+                            child: Checkbox(
+                              value: selected,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              onChanged: (v) {
+                                if (v == true) {
+                                  provider.selectOrder(order.id);
+                                } else {
+                                  provider.selectOrder(null);
+                                }
+                              },
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    DataCell(Text(order.orderNumber)),
-                    DataCell(
-                      Text(
-                        (order.customerName != null && order.customerName!.trim().isNotEmpty)
-                            ? order.customerName!
-                            : 'Khách hàng #${order.customerId}',
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        (order.creatorName != null && order.creatorName!.trim().isNotEmpty)
-                            ? order.creatorName!
-                            : (order.createdBy != null ? 'Nhân viên #${order.createdBy}' : '-'),
-                      ),
-                    ),
-                    DataCell(Text(typeLabels[order.orderType] ?? '-')),
-                    DataCell(Text(paymentLabels[order.paymentMethod] ?? '-')),
-                    DataCell(_StatusChip(
-                      label: statusLabels[order.statusId] ?? 'Không xác định',
-                      color: statusColors[order.statusId] ?? Colors.grey,
-                    )),
-                    DataCell(Text(currencyFormat.format(order.totalAmount))),
-                    DataCell(Text(dateFormat.format(order.createdAt))),
-                  ],
-                );
-              }).toList(),
+                        DataCell(Text(order.orderNumber)),
+                        DataCell(
+                          Text(
+                            (order.customerName != null &&
+                                    order.customerName!.trim().isNotEmpty)
+                                ? order.customerName!
+                                : 'Khách hàng #${order.customerId}',
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            (order.creatorName != null &&
+                                    order.creatorName!.trim().isNotEmpty)
+                                ? order.creatorName!
+                                : (order.createdBy != null
+                                    ? 'Nhân viên #${order.createdBy}'
+                                    : '-'),
+                          ),
+                        ),
+                        DataCell(Text(typeLabels[order.orderType] ?? '-')),
+                        DataCell(
+                          Text(paymentLabels[order.paymentMethod] ?? '-'),
+                        ),
+                        DataCell(
+                          _StatusChip(
+                            label:
+                                statusLabels[order.statusId] ??
+                                'Không xác định',
+                            color: statusColors[order.statusId] ?? Colors.grey,
+                          ),
+                        ),
+                        DataCell(
+                          Text(currencyFormat.format(order.totalAmount)),
+                        ),
+                        DataCell(Text(dateFormat.format(order.createdAt))),
+                      ],
+                    );
+                  }).toList(),
             ),
           ),
         );
@@ -145,15 +165,8 @@ class _StatusChip extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(color: color, fontWeight: FontWeight.w600),
       ),
     );
   }
 }
-
-
-
-

@@ -11,7 +11,9 @@ class ProductRemoteDataSource {
     final response = await client.get(ApiEndpoint.products);
     final data = response.data;
     if (data is List) {
-      return data.map((e) => ProductModel.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
@@ -48,11 +50,18 @@ class ProductRemoteDataSource {
       if (color != null) 'Color': color,
       if (size != null) 'Size': size,
       if (description != null) 'Description': description,
-      if (imageUrl != null && imageFilePath == null && imageBytes == null) 'ImageUrl': imageUrl,
+      if (imageUrl != null && imageFilePath == null && imageBytes == null)
+        'ImageUrl': imageUrl,
       if (imageBytes != null && imageFileName != null)
-        'ImageFile': MultipartFile.fromBytes(imageBytes, filename: imageFileName)
+        'ImageFile': MultipartFile.fromBytes(
+          imageBytes,
+          filename: imageFileName,
+        )
       else if (imageFilePath != null)
-        'ImageFile': await MultipartFile.fromFile(imageFilePath, filename: imageFilePath.split('/').last),
+        'ImageFile': await MultipartFile.fromFile(
+          imageFilePath,
+          filename: imageFilePath.split('/').last,
+        ),
     });
 
     final response = await client.postMultipart(ApiEndpoint.products, formData);
@@ -84,15 +93,25 @@ class ProductRemoteDataSource {
       if (color != null) 'Color': color,
       if (size != null) 'Size': size,
       if (description != null) 'Description': description,
-      if (imageUrl != null && imageFilePath == null && imageBytes == null) 'ImageUrl': imageUrl,
+      if (imageUrl != null && imageFilePath == null && imageBytes == null)
+        'ImageUrl': imageUrl,
       'StatusId': statusId,
       if (imageBytes != null && imageFileName != null)
-        'ImageFile': MultipartFile.fromBytes(imageBytes, filename: imageFileName)
+        'ImageFile': MultipartFile.fromBytes(
+          imageBytes,
+          filename: imageFileName,
+        )
       else if (imageFilePath != null)
-        'ImageFile': await MultipartFile.fromFile(imageFilePath, filename: imageFilePath.split('/').last),
+        'ImageFile': await MultipartFile.fromFile(
+          imageFilePath,
+          filename: imageFilePath.split('/').last,
+        ),
     });
 
-    final response = await client.putMultipart('${ApiEndpoint.products}/$id', formData);
+    final response = await client.putMultipart(
+      '${ApiEndpoint.products}/$id',
+      formData,
+    );
     final data = response.data;
     if (data is Map<String, dynamic>) {
       return ProductModel.fromJson(data);
@@ -122,13 +141,18 @@ class ProductRemoteDataSource {
     final response = await client.post('${ApiEndpoint.products}/search', body);
     final data = response.data;
     if (data is List) {
-      return data.map((e) => ProductModel.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
 
   Future<List<String>> suggest(String keyword) async {
-    final response = await client.get('${ApiEndpoint.products}/suggest', queryParameters: {'keyword': keyword});
+    final response = await client.get(
+      '${ApiEndpoint.products}/suggest',
+      queryParameters: {'keyword': keyword},
+    );
     final data = response.data;
     if (data is List) {
       return data.map((e) => e.toString()).toList();
@@ -136,7 +160,13 @@ class ProductRemoteDataSource {
     return [];
   }
 
-  Future<StoreQuantityModel?> createStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
+  Future<StoreQuantityModel?> createStoreQuantity(
+    int productId,
+    int storeId,
+    int quantity, {
+    double? salePrice,
+    String? storeName,
+  }) async {
     final body = <String, dynamic>{
       'storeId': storeId,
       'storeName': storeName ?? '',
@@ -167,14 +197,22 @@ class ProductRemoteDataSource {
           }
         }
       }
-      throw Exception(errorMessage ?? e.message ?? 'Lỗi khi thêm số lượng tồn kho');
+      throw Exception(
+        errorMessage ?? e.message ?? 'Lỗi khi thêm số lượng tồn kho',
+      );
     } catch (e) {
       if (e is Exception) rethrow;
       throw Exception('Lỗi khi thêm số lượng tồn kho: $e');
     }
   }
 
-  Future<StoreQuantityModel?> updateStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
+  Future<StoreQuantityModel?> updateStoreQuantity(
+    int productId,
+    int storeId,
+    int quantity, {
+    double? salePrice,
+    String? storeName,
+  }) async {
     final body = <String, dynamic>{
       'storeId': storeId,
       'storeName': storeName ?? '',
@@ -205,11 +243,12 @@ class ProductRemoteDataSource {
           }
         }
       }
-      throw Exception(errorMessage ?? e.message ?? 'Lỗi khi cập nhật số lượng tồn kho');
+      throw Exception(
+        errorMessage ?? e.message ?? 'Lỗi khi cập nhật số lượng tồn kho',
+      );
     } catch (e) {
       if (e is Exception) rethrow;
       throw Exception('Lỗi khi cập nhật số lượng tồn kho: $e');
     }
   }
 }
-

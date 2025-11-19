@@ -33,11 +33,16 @@ class PromotionRepositoryImpl implements PromotionRepository {
       startDate: startDate,
       endDate: endDate,
       statusId: statusId,
-      products: products.map((p) => PromotionProductModel(
-        productId: p['productId'] as int,
-        productName: '',
-        discountPercent: (p['discountPercent'] as num).toDouble(),
-      )).toList(),
+      products:
+          products
+              .map(
+                (p) => PromotionProductModel(
+                  productId: p['productId'] as int,
+                  productName: '',
+                  discountPercent: (p['discountPercent'] as num).toDouble(),
+                ),
+              )
+              .toList(),
       stores: storeIds.map((id) => PromotionStoreModel(storeId: id)).toList(),
     );
     return await remote.create(promotion);
@@ -59,11 +64,16 @@ class PromotionRepositoryImpl implements PromotionRepository {
       startDate: startDate,
       endDate: endDate,
       statusId: statusId,
-      products: products.map((p) => PromotionProductModel(
-        productId: p['productId'] as int,
-        productName: '',
-        discountPercent: (p['discountPercent'] as num).toDouble(),
-      )).toList(),
+      products:
+          products
+              .map(
+                (p) => PromotionProductModel(
+                  productId: p['productId'] as int,
+                  productName: '',
+                  discountPercent: (p['discountPercent'] as num).toDouble(),
+                ),
+              )
+              .toList(),
       stores: storeIds.map((id) => PromotionStoreModel(storeId: id)).toList(),
     );
     return await remote.update(id, promotion);
@@ -74,4 +84,3 @@ class PromotionRepositoryImpl implements PromotionRepository {
     return await remote.delete(id);
   }
 }
-

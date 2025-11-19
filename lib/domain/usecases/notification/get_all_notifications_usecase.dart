@@ -7,4 +7,3 @@ class GetAllNotificationsUseCase {
 
   Future<List<Notification>> call() => repository.getAll();
 }
-

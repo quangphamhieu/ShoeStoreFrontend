@@ -6,4 +6,3 @@ class SuggestProductsUseCase {
 
   Future<List<String>> call(String keyword) => repository.suggest(keyword);
 }
-

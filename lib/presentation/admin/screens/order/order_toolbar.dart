@@ -12,10 +12,7 @@ class OrderToolbar extends StatelessWidget {
     6: 'Đã hủy',
   };
 
-  static const Map<int, String> typeLabels = {
-    0: 'Online',
-    1: 'Offline',
-  };
+  static const Map<int, String> typeLabels = {0: 'Online', 1: 'Offline'};
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +49,10 @@ class OrderToolbar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 14,
+                  horizontal: 16,
+                ),
               ),
             ),
           );
@@ -63,27 +63,33 @@ class OrderToolbar extends StatelessWidget {
             underline: const SizedBox.shrink(),
             onChanged: provider.setTypeFilter,
             items: [
-              const DropdownMenuItem<int?>(value: null, child: Text('Tất cả loại đơn')),
-              ...typeLabels.entries.map((entry) => DropdownMenuItem<int?>(
-                    value: entry.key,
-                    child: Text(entry.value),
-                  )),
+              const DropdownMenuItem<int?>(
+                value: null,
+                child: Text('Tất cả loại đơn'),
+              ),
+              ...typeLabels.entries.map(
+                (entry) => DropdownMenuItem<int?>(
+                  value: entry.key,
+                  child: Text(entry.value),
+                ),
+              ),
             ],
           );
 
           final statusChips = Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: statusLabels.entries.map((entry) {
-              final isSelected = provider.statusFilters.contains(entry.key);
-              return FilterChip(
-                label: Text(entry.value),
-                selected: isSelected,
-                onSelected: (_) => provider.toggleStatusFilter(entry.key),
-                selectedColor: const Color(0xFFE0F2FE),
-                checkmarkColor: Colors.deepOrange,
-              );
-            }).toList(),
+            children:
+                statusLabels.entries.map((entry) {
+                  final isSelected = provider.statusFilters.contains(entry.key);
+                  return FilterChip(
+                    label: Text(entry.value),
+                    selected: isSelected,
+                    onSelected: (_) => provider.toggleStatusFilter(entry.key),
+                    selectedColor: const Color(0xFFE0F2FE),
+                    checkmarkColor: Colors.deepOrange,
+                  );
+                }).toList(),
           );
 
           final actionButtons = Wrap(
@@ -95,25 +101,28 @@ class OrderToolbar extends StatelessWidget {
                   label: 'Xác nhận thanh toán',
                   color: const Color(0xFF0EA5E9),
                   icon: Icons.check_circle_outline,
-                  onPressed: !provider.isUpdatingStatus
-                      ? () => _handleUpdate(context, provider, 3)
-                      : null,
+                  onPressed:
+                      !provider.isUpdatingStatus
+                          ? () => _handleUpdate(context, provider, 3)
+                          : null,
                 ),
                 _StatusActionButton(
                   label: 'Giao hàng thành công',
                   color: const Color(0xFF10B981),
                   icon: Icons.local_shipping_outlined,
-                  onPressed: !provider.isUpdatingStatus
-                      ? () => _handleUpdate(context, provider, 5)
-                      : null,
+                  onPressed:
+                      !provider.isUpdatingStatus
+                          ? () => _handleUpdate(context, provider, 5)
+                          : null,
                 ),
                 _StatusActionButton(
                   label: 'Hủy đơn hàng',
                   color: const Color(0xFFDC2626),
                   icon: Icons.cancel_outlined,
-                  onPressed: !provider.isUpdatingStatus
-                      ? () => _handleUpdate(context, provider, 6)
-                      : null,
+                  onPressed:
+                      !provider.isUpdatingStatus
+                          ? () => _handleUpdate(context, provider, 6)
+                          : null,
                 ),
               ],
             ],
@@ -129,11 +138,18 @@ class OrderToolbar extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Quản lý Đơn hàng', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+                        Text(
+                          'Quản lý Đơn hàng',
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         const SizedBox(height: 6),
                         Text(
                           'Theo dõi và cập nhật trạng thái các đơn hàng',
-                          style: theme.textTheme.bodyMedium?.copyWith(color: const Color(0xFF94A3B8)),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: const Color(0xFF94A3B8),
+                          ),
                         ),
                       ],
                     ),
@@ -152,13 +168,15 @@ class OrderToolbar extends StatelessWidget {
                 Align(alignment: Alignment.centerLeft, child: typeFilter),
               ],
               const SizedBox(height: 18),
-              Text('Lọc theo trạng thái', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+              Text(
+                'Lọc theo trạng thái',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               const SizedBox(height: 8),
               statusChips,
-              if (hasSelection) ...[
-                const SizedBox(height: 18),
-                actionButtons,
-              ],
+              if (hasSelection) ...[const SizedBox(height: 18), actionButtons],
             ],
           );
 
@@ -168,12 +186,18 @@ class OrderToolbar extends StatelessWidget {
     );
   }
 
-  Future<void> _handleUpdate(BuildContext context, OrderProvider provider, int statusId) async {
+  Future<void> _handleUpdate(
+    BuildContext context,
+    OrderProvider provider,
+    int statusId,
+  ) async {
     final success = await provider.updateSelectedOrdersStatus(statusId);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(success ? 'Cập nhật trạng thái thành công' : 'Cập nhật thất bại'),
+        content: Text(
+          success ? 'Cập nhật trạng thái thành công' : 'Cập nhật thất bại',
+        ),
       ),
     );
   }
@@ -208,7 +232,3 @@ class _StatusActionButton extends StatelessWidget {
     );
   }
 }
-
-
-
-

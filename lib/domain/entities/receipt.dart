@@ -31,4 +31,3 @@ class Receipt {
     required this.details,
   });
 }
-

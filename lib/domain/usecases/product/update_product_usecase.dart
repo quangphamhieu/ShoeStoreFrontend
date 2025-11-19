@@ -20,22 +20,20 @@ class UpdateProductUseCase {
     List<int>? imageBytes,
     String? imageFileName,
     required int statusId,
-  }) =>
-      repository.update(
-        id,
-        name: name,
-        brandId: brandId,
-        supplierId: supplierId,
-        costPrice: costPrice,
-        originalPrice: originalPrice,
-        color: color,
-        size: size,
-        description: description,
-        imageUrl: imageUrl,
-        imageFilePath: imageFilePath,
-        imageBytes: imageBytes,
-        imageFileName: imageFileName,
-        statusId: statusId,
-      );
+  }) => repository.update(
+    id,
+    name: name,
+    brandId: brandId,
+    supplierId: supplierId,
+    costPrice: costPrice,
+    originalPrice: originalPrice,
+    color: color,
+    size: size,
+    description: description,
+    imageUrl: imageUrl,
+    imageFilePath: imageFilePath,
+    imageBytes: imageBytes,
+    imageFileName: imageFileName,
+    statusId: statusId,
+  );
 }
-

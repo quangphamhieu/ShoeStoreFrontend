@@ -7,4 +7,3 @@ class GetAllSuppliersUseCase {
 
   Future<List<Supplier>> call() => repository.getAll();
 }
-

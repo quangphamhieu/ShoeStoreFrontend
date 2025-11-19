@@ -10,12 +10,10 @@ class UpdateReceiptInfoUseCase {
     required int supplierId,
     int? storeId,
     required List<Map<String, dynamic>> details,
-  }) =>
-      repository.updateInfo(
-        id,
-        supplierId: supplierId,
-        storeId: storeId,
-        details: details,
-      );
+  }) => repository.updateInfo(
+    id,
+    supplierId: supplierId,
+    storeId: storeId,
+    details: details,
+  );
 }
-

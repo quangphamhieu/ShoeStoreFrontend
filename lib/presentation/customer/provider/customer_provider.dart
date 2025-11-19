@@ -20,6 +20,8 @@ class ProductGroup {
 }
 
 class CustomerProvider extends ChangeNotifier {
+  static const int warehouseStoreId = 1;
+
   final GetAllProductsUseCase getAllProductsUseCase;
   final SearchProductsUseCase searchProductsUseCase;
 
@@ -28,9 +30,11 @@ class CustomerProvider extends ChangeNotifier {
     required this.searchProductsUseCase,
   });
 
+  // Raw products từ API (tất cả variants)
   List<Product> _products = [];
   List<Product> get products => _products;
 
+  // Customer: Products đã được group (merge các variants cùng tên)
   List<ProductGroup> _productGroups = [];
   List<ProductGroup> get productGroups => _productGroups;
 
@@ -55,7 +59,8 @@ class CustomerProvider extends ChangeNotifier {
   String _sortBy = 'newest'; // newest, price-asc, price-desc, name
   String get sortBy => _sortBy;
 
-  // Nhóm products theo base name (bỏ size và color ở cuối)
+  // Customer: Nhóm products theo base name (bỏ size và color ở cuối)
+  // Ví dụ: "Air Jordan 1 - Red - 42" và "Air Jordan 1 - Black - 43" -> "Air Jordan 1"
   String _getBaseName(String productName) {
     // Loại bỏ các pattern size và color ở cuối tên
     // Ví dụ: "Air Force 1 - White - 42" -> "Air Force 1"
@@ -73,6 +78,7 @@ class CustomerProvider extends ChangeNotifier {
     return baseName.trim();
   }
 
+  // Customer: Group products - merge các variants (cùng tên, khác size/color) thành 1 product
   List<ProductGroup> _groupProducts(List<Product> products) {
     final Map<String, List<Product>> grouped = {};
 
@@ -187,11 +193,22 @@ class CustomerProvider extends ChangeNotifier {
     return result;
   }
 
+  // Customer: Load products và tự động group chúng
   Future<void> loadProducts() async {
     _isLoading = true;
     notifyListeners();
     try {
-      _products = await getAllProductsUseCase.call();
+      // Load tất cả products từ API (raw data)
+      final allProducts = await getAllProductsUseCase.call();
+      _products =
+          allProducts
+              .where(
+                (product) => product.stores.any(
+                  (store) => store.storeId == warehouseStoreId,
+                ),
+              )
+              .toList();
+      // Group products lại (merge variants)
       _productGroups = _groupProducts(_products);
     } catch (e) {
       _products = [];

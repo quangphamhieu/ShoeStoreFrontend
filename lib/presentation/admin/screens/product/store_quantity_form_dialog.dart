@@ -20,7 +20,8 @@ class StoreQuantityFormDialog extends StatefulWidget {
   });
 
   @override
-  State<StoreQuantityFormDialog> createState() => _StoreQuantityFormDialogState();
+  State<StoreQuantityFormDialog> createState() =>
+      _StoreQuantityFormDialogState();
 }
 
 class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
@@ -34,11 +35,15 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
   @override
   void initState() {
     super.initState();
-    _quantityController = TextEditingController(text: widget.initialQuantity?.toString() ?? '0');
+    _quantityController = TextEditingController(
+      text: widget.initialQuantity?.toString() ?? '0',
+    );
     _initialSalePriceValue = widget.initialSalePrice ?? 0;
-    _salePriceController = TextEditingController(text: _initialSalePriceValue.toString());
+    _salePriceController = TextEditingController(
+      text: _initialSalePriceValue.toString(),
+    );
     _selectedStoreId = widget.storeId;
-    
+
     // Đảm bảo stores đã được load
     Future.microtask(() {
       final storeProvider = context.read<StoreProvider>();
@@ -55,7 +60,11 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
     super.dispose();
   }
 
-  InputDecoration _decoration(String label, {String? hint, bool required = false}) {
+  InputDecoration _decoration(
+    String label, {
+    String? hint,
+    bool required = false,
+  }) {
     final suffix = required ? ' *' : '';
     return InputDecoration(
       labelText: '$label$suffix',
@@ -95,58 +104,80 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
 
     if (widget.editMode) {
       if (_selectedStoreId == null || widget.storeId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lỗi: Không tìm thấy cửa hàng')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Lỗi: Không tìm thấy cửa hàng')),
+        );
         return;
       }
       // Lấy storeName từ store list
       String? storeName;
       try {
-        final store = storeProvider.stores.firstWhere((s) => s.id == widget.storeId);
+        final store = storeProvider.stores.firstWhere(
+          (s) => s.id == widget.storeId,
+        );
         storeName = store.name;
       } catch (_) {
         // Nếu không tìm thấy, thử tìm với _selectedStoreId
         try {
           if (_selectedStoreId != null) {
-            final store = storeProvider.stores.firstWhere((s) => s.id == _selectedStoreId);
+            final store = storeProvider.stores.firstWhere(
+              (s) => s.id == _selectedStoreId,
+            );
             storeName = store.name;
           }
         } catch (_) {
           storeName = null;
         }
       }
-      
+
       setState(() => _loading = true);
       try {
-        final success = await productProvider.updateStoreQuantity(widget.productId, widget.storeId!, quantity, salePrice: null, storeName: storeName);
+        final success = await productProvider.updateStoreQuantity(
+          widget.productId,
+          widget.storeId!,
+          quantity,
+          salePrice: null,
+          storeName: storeName,
+        );
         setState(() => _loading = false);
         if (mounted) {
           if (success) {
             Navigator.of(context).pop(true);
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cập nhật thất bại. Vui lòng thử lại')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Cập nhật thất bại. Vui lòng thử lại'),
+              ),
+            );
           }
         }
       } catch (e) {
         setState(() => _loading = false);
         if (mounted) {
           final errorMsg = e.toString();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Lỗi: $errorMsg')));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Lỗi: $errorMsg')));
         }
       }
     } else {
       if (_selectedStoreId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng chọn cửa hàng')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Vui lòng chọn cửa hàng')));
         return;
       }
       // Lấy storeName từ store list
       String? storeName;
       try {
-        final store = storeProvider.stores.firstWhere((s) => s.id == _selectedStoreId);
+        final store = storeProvider.stores.firstWhere(
+          (s) => s.id == _selectedStoreId,
+        );
         storeName = store.name;
       } catch (_) {
         storeName = null;
       }
-      
+
       setState(() => _loading = true);
       try {
         final success = await productProvider.createStoreQuantity(
@@ -161,16 +192,25 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
           if (success) {
             Navigator.of(context).pop(true);
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Thêm thất bại. Cửa hàng đã tồn tại cho sản phẩm này')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Thêm thất bại. Cửa hàng đã tồn tại cho sản phẩm này',
+                ),
+              ),
+            );
           }
         }
       } catch (e) {
         setState(() => _loading = false);
         if (mounted) {
-          final errorMsg = e.toString().contains('Cửa hàng đã tồn tại') 
-              ? 'Cửa hàng đã tồn tại cho sản phẩm này'
-              : 'Lỗi: ${e.toString()}';
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMsg)));
+          final errorMsg =
+              e.toString().contains('Cửa hàng đã tồn tại')
+                  ? 'Cửa hàng đã tồn tại cho sản phẩm này'
+                  : 'Lỗi: ${e.toString()}';
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(errorMsg)));
         }
       }
     }
@@ -207,26 +247,49 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget.editMode ? 'Cập nhật số lượng' : 'Thêm số lượng tồn kho',
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    widget.editMode
+                        ? 'Cập nhật số lượng'
+                        : 'Thêm số lượng tồn kho',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.of(context).pop(false),
-                    icon: const Icon(Icons.close_rounded, color: Color(0xFF94A3B8)),
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: Color(0xFF94A3B8),
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
               DropdownButtonFormField<int?>(
-                value: _selectedStoreId != null && storeProvider.stores.any((s) => s.id == _selectedStoreId) ? _selectedStoreId : null,
+                value:
+                    _selectedStoreId != null &&
+                            storeProvider.stores.any(
+                              (s) => s.id == _selectedStoreId,
+                            )
+                        ? _selectedStoreId
+                        : null,
                 decoration: _decoration('Cửa hàng', required: true),
                 items: [
-                  const DropdownMenuItem<int?>(value: null, child: Text('Chọn cửa hàng')),
-                  ...storeProvider.stores.map((s) => DropdownMenuItem<int?>(value: s.id, child: Text(s.name))),
+                  const DropdownMenuItem<int?>(
+                    value: null,
+                    child: Text('Chọn cửa hàng'),
+                  ),
+                  ...storeProvider.stores.map(
+                    (s) => DropdownMenuItem<int?>(
+                      value: s.id,
+                      child: Text(s.name),
+                    ),
+                  ),
                 ],
-                onChanged: widget.editMode
-                    ? null
-                    : (value) => setState(() => _selectedStoreId = value),
+                onChanged:
+                    widget.editMode
+                        ? null
+                        : (value) => setState(() => _selectedStoreId = value),
               ),
               const SizedBox(height: 14),
               TextFormField(
@@ -234,7 +297,8 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
                 decoration: _decoration('Số lượng', hint: '0', required: true),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) return 'Vui lòng nhập số lượng';
+                  if (value == null || value.trim().isEmpty)
+                    return 'Vui lòng nhập số lượng';
                   final qty = int.tryParse(value);
                   if (qty == null) return 'Số lượng không hợp lệ';
                   if (qty < 0) return 'Số lượng phải >= 0';
@@ -253,9 +317,15 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: _loading ? null : () => Navigator.of(context).pop(false),
+                    onPressed:
+                        _loading
+                            ? null
+                            : () => Navigator.of(context).pop(false),
                     style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14,
+                      ),
                       foregroundColor: const Color(0xFF64748B),
                     ),
                     child: const Text('Hủy'),
@@ -264,14 +334,30 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
                   ElevatedButton(
                     onPressed: _handleSubmit,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: widget.editMode ? const Color(0xFF87CEEB) : const Color(0xFF2563EB),
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      backgroundColor:
+                          widget.editMode
+                              ? const Color(0xFF87CEEB)
+                              : const Color(0xFF2563EB),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 14,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                       elevation: 0,
                     ),
-                    child: _loading
-                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                        : Text(widget.editMode ? 'Lưu thay đổi' : 'Thêm'),
+                    child:
+                        _loading
+                            ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                            : Text(widget.editMode ? 'Lưu thay đổi' : 'Thêm'),
                   ),
                 ],
               ),
@@ -282,4 +368,3 @@ class _StoreQuantityFormDialogState extends State<StoreQuantityFormDialog> {
     );
   }
 }
-

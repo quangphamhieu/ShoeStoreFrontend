@@ -21,26 +21,38 @@ class OrderModel extends Order {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
-    final detailsJson = json['details'] as List<dynamic>? ?? json['items'] as List<dynamic>? ?? [];
-    final details = detailsJson
-        .map((detail) => OrderDetailModel.fromJson(detail as Map<String, dynamic>))
-        .toList();
+    final detailsJson =
+        json['details'] as List<dynamic>? ??
+        json['items'] as List<dynamic>? ??
+        [];
+    final details =
+        detailsJson
+            .map(
+              (detail) =>
+                  OrderDetailModel.fromJson(detail as Map<String, dynamic>),
+            )
+            .toList();
 
     return OrderModel(
       id: (json['id'] as num).toInt(),
       orderNumber: json['orderNumber'] as String,
       customerId: (json['customerId'] as num).toInt(),
       customerName: json['customerName'] as String?,
-      createdBy: json['createdBy'] != null ? (json['createdBy'] as num).toInt() : null,
+      createdBy:
+          json['createdBy'] != null ? (json['createdBy'] as num).toInt() : null,
       creatorName: json['creatorName'] as String?,
-      storeId: json['storeId'] != null ? (json['storeId'] as num).toInt() : null,
+      storeId:
+          json['storeId'] != null ? (json['storeId'] as num).toInt() : null,
       storeName: json['storeName'] as String?,
       statusId: (json['statusId'] as num).toInt(),
       totalAmount: (json['totalAmount'] as num).toDouble(),
       orderType: (json['orderType'] as num).toInt(),
       paymentMethod: (json['paymentMethod'] as num).toInt(),
       createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt'] as String) : null,
+      updatedAt:
+          json['updatedAt'] != null
+              ? DateTime.tryParse(json['updatedAt'] as String)
+              : null,
       details: details,
     );
   }
@@ -51,8 +63,6 @@ class OrderDetailModel extends OrderDetail {
     required super.id,
     required super.productId,
     super.productName,
-    required super.storeId,
-    super.storeName,
     required super.quantity,
     required super.unitPrice,
   });
@@ -62,14 +72,8 @@ class OrderDetailModel extends OrderDetail {
       id: (json['id'] as num).toInt(),
       productId: (json['productId'] as num).toInt(),
       productName: json['productName'] as String?,
-      storeId: (json['storeId'] as num).toInt(),
-      storeName: json['storeName'] as String?,
       quantity: (json['quantity'] as num).toInt(),
       unitPrice: (json['unitPrice'] as num).toDouble(),
     );
   }
 }
-
-
-
-

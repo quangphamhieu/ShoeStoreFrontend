@@ -10,7 +10,9 @@ class StoreRemoteDataSource {
     final response = await client.get(ApiEndpoint.stores);
     final data = response.data;
     if (data is List) {
-      return data.map((e) => StoreModel.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => StoreModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
@@ -24,7 +26,12 @@ class StoreRemoteDataSource {
     return null;
   }
 
-  Future<StoreModel> create({required String name, required String code, required String address, required String phone}) async {
+  Future<StoreModel> create({
+    required String name,
+    required String code,
+    required String address,
+    required String phone,
+  }) async {
     final body = {
       'code': code,
       'name': name,
@@ -63,5 +70,3 @@ class StoreRemoteDataSource {
     return response.statusCode == 204 || response.statusCode == 200;
   }
 }
-
-

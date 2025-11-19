@@ -41,28 +41,33 @@ class _BrandScreenState extends State<BrandScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const BrandToolbar(),
-                    const SizedBox(height: 24),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 25,
-                              offset: const Offset(0, 12),
-                            ),
-                          ],
-                        ),
-                        child: provider.isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : SingleChildScrollView(
-                                padding: const EdgeInsets.all(20),
-                                child: BrandTable(brands: provider.filteredBrands),
+                          const SizedBox(height: 24),
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(18),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.05),
+                                    blurRadius: 25,
+                                    offset: const Offset(0, 12),
+                                  ),
+                                ],
                               ),
-                      ),
-                    ),
+                              child:
+                                  provider.isLoading
+                                      ? const Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                      : SingleChildScrollView(
+                                        padding: const EdgeInsets.all(20),
+                                        child: BrandTable(
+                                          brands: provider.filteredBrands,
+                                        ),
+                                      ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

@@ -13,15 +13,13 @@ class UpdatePromotionUseCase {
     required int statusId,
     required List<Map<String, dynamic>> products,
     required List<int> storeIds,
-  }) =>
-      repository.update(
-        id,
-        name: name,
-        startDate: startDate,
-        endDate: endDate,
-        statusId: statusId,
-        products: products,
-        storeIds: storeIds,
-      );
+  }) => repository.update(
+    id,
+    name: name,
+    startDate: startDate,
+    endDate: endDate,
+    statusId: statusId,
+    products: products,
+    storeIds: storeIds,
+  );
 }
-

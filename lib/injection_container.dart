@@ -78,6 +78,8 @@ import 'domain/usecases/notification/get_notification_by_id_usecase.dart';
 import 'domain/usecases/notification/delete_notification_usecase.dart';
 import 'domain/usecases/order/get_all_orders_usecase.dart';
 import 'domain/usecases/order/update_order_status_usecase.dart';
+import 'domain/usecases/order/update_order_detail_usecase.dart';
+import 'domain/usecases/order/delete_order_detail_usecase.dart';
 import 'presentation/admin/provider/brand_provider.dart';
 import 'presentation/admin/provider/store_provider.dart';
 import 'presentation/admin/provider/supplier_provider.dart';
@@ -109,11 +111,21 @@ Future<void> init() async {
   sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(sl()));
   sl.registerLazySingleton<BrandRepository>(() => BrandRepositoryImpl(sl()));
   sl.registerLazySingleton<StoreRepository>(() => StoreRepositoryImpl(sl()));
-  sl.registerLazySingleton<SupplierRepository>(() => SupplierRepositoryImpl(sl()));
-  sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl(sl()));
-  sl.registerLazySingleton<PromotionRepository>(() => PromotionRepositoryImpl(sl()));
-  sl.registerLazySingleton<ReceiptRepository>(() => ReceiptRepositoryImpl(sl()));
-  sl.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(sl()));
+  sl.registerLazySingleton<SupplierRepository>(
+    () => SupplierRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton<ProductRepository>(
+    () => ProductRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton<PromotionRepository>(
+    () => PromotionRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton<ReceiptRepository>(
+    () => ReceiptRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepositoryImpl(sl()),
+  );
   sl.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl(sl()));
 
   // Usecases
@@ -164,72 +176,94 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DeleteNotificationUseCase(sl()));
   sl.registerLazySingleton(() => GetAllOrdersUseCase(sl()));
   sl.registerLazySingleton(() => UpdateOrderStatusUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateOrderDetailUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteOrderDetailUseCase(sl()));
 
   // Provider: register factory so each provider instance created by provider package is new if needed
   sl.registerFactory(() => SignUpProvider(sl()));
   sl.registerFactory(() => LoginProvider(sl()));
-  sl.registerFactory(() => UserProvider(
-        getAllUsers: sl(),
-        getUserById: sl(),
-        createUserUc: sl(),
-        updateUserUc: sl(),
-        deleteUserUc: sl(),
-      ));
-  sl.registerFactory(() => BrandProvider(
-        getAllUseCase: sl(),
-        getByIdUseCase: sl(),
-        createUseCase: sl(),
-        updateUseCase: sl(),
-        deleteUseCase: sl(),
-      ));
-  sl.registerFactory(() => StoreProvider(
-        getAllUseCase: sl(),
-        getByIdUseCase: sl(),
-        createUseCase: sl(),
-        updateUseCase: sl(),
-        deleteUseCase: sl(),
-      ));
-  sl.registerFactory(() => SupplierProvider(
-        getAllUseCase: sl(),
-        getByIdUseCase: sl(),
-        createUseCase: sl(),
-        updateUseCase: sl(),
-        deleteUseCase: sl(),
-      ));
-  sl.registerFactory(() => ProductProvider(
-        getAllUseCase: sl(),
-        getByIdUseCase: sl(),
-        createUseCase: sl(),
-        updateUseCase: sl(),
-        deleteUseCase: sl(),
-        searchUseCase: sl(),
-        createStoreQuantityUseCase: sl(),
-        updateStoreQuantityUseCase: sl(),
-      ));
-  sl.registerFactory(() => PromotionProvider(
-        getAllUseCase: sl(),
-        getByIdUseCase: sl(),
-        createUseCase: sl(),
-        updateUseCase: sl(),
-        deleteUseCase: sl(),
-      ));
-  sl.registerFactory(() => ReceiptProvider(
-        getAllUseCase: sl(),
-        getByIdUseCase: sl(),
-        createUseCase: sl(),
-        updateInfoUseCase: sl(),
-        updateReceivedUseCase: sl(),
-        deleteUseCase: sl(),
-      ));
-  sl.registerFactory(() => NotificationProvider(
-        getAllUseCase: sl(),
-        getByIdUseCase: sl(),
-        deleteUseCase: sl(),
-      ));
-  sl.registerFactory(() => OrderProvider(
-        getAllUseCase: sl(),
-        updateStatusUseCase: sl(),
-      ));
+  sl.registerFactory(
+    () => UserProvider(
+      getAllUsers: sl(),
+      getUserById: sl(),
+      createUserUc: sl(),
+      updateUserUc: sl(),
+      deleteUserUc: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => BrandProvider(
+      getAllUseCase: sl(),
+      getByIdUseCase: sl(),
+      createUseCase: sl(),
+      updateUseCase: sl(),
+      deleteUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => StoreProvider(
+      getAllUseCase: sl(),
+      getByIdUseCase: sl(),
+      createUseCase: sl(),
+      updateUseCase: sl(),
+      deleteUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => SupplierProvider(
+      getAllUseCase: sl(),
+      getByIdUseCase: sl(),
+      createUseCase: sl(),
+      updateUseCase: sl(),
+      deleteUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => ProductProvider(
+      getAllUseCase: sl(),
+      getByIdUseCase: sl(),
+      createUseCase: sl(),
+      updateUseCase: sl(),
+      deleteUseCase: sl(),
+      searchUseCase: sl(),
+      createStoreQuantityUseCase: sl(),
+      updateStoreQuantityUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => PromotionProvider(
+      getAllUseCase: sl(),
+      getByIdUseCase: sl(),
+      createUseCase: sl(),
+      updateUseCase: sl(),
+      deleteUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => ReceiptProvider(
+      getAllUseCase: sl(),
+      getByIdUseCase: sl(),
+      createUseCase: sl(),
+      updateInfoUseCase: sl(),
+      updateReceivedUseCase: sl(),
+      deleteUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => NotificationProvider(
+      getAllUseCase: sl(),
+      getByIdUseCase: sl(),
+      deleteUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => OrderProvider(
+      getAllUseCase: sl(),
+      updateStatusUseCase: sl(),
+      updateDetailUseCase: sl(),
+      deleteDetailUseCase: sl(),
+    ),
+  );
   sl.registerFactory(
     () => CustomerProvider(
       getAllProductsUseCase: sl(),

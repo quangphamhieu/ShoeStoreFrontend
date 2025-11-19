@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shoestorefe/data/models/user_model.dart';
 import 'package:shoestorefe/domain/usecases/user/login.dart';
+import 'package:shoestorefe/core/network/token_handler.dart';
 
 class LoginProvider extends ChangeNotifier {
   final LoginUser loginUserUsecase;
@@ -36,12 +37,11 @@ class LoginProvider extends ChangeNotifier {
 
     try {
       final response = await loginUserUsecase.call(phoneOrEmail, password);
-      if (response == null ) {
+      if (response == null) {
         _error = "Sai tài khoản hoặc mật khẩu";
-      }else if(response.roleName != "Super Admin"){
-        _error = "Tài khoản không có quyền truy cập";
-      }
-      else {
+      } else {
+        // Lưu token
+        await TokenHandler().addToken(response.token);
         _user = response;
       }
     } catch (e) {

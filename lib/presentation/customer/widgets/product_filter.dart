@@ -25,7 +25,18 @@ class ProductFilter extends StatelessWidget {
             context,
             label: 'Màu sắc',
             value: provider.selectedColor,
-            items: ['Black', 'White', 'Red', 'Blue', 'Yellow', 'Gray', 'Green', 'Orange', 'Pink', 'Purple'],
+            items: [
+              'Black',
+              'White',
+              'Red',
+              'Blue',
+              'Yellow',
+              'Gray',
+              'Green',
+              'Orange',
+              'Pink',
+              'Purple',
+            ],
             displayMap: {
               'Black': 'Đen',
               'White': 'Trắng',
@@ -46,7 +57,19 @@ class ProductFilter extends StatelessWidget {
             context,
             label: 'Kích thước',
             value: provider.selectedSize,
-            items: ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45'],
+            items: [
+              '35',
+              '36',
+              '37',
+              '38',
+              '39',
+              '40',
+              '41',
+              '42',
+              '43',
+              '44',
+              '45',
+            ],
             onChanged: (value) => provider.setSize(value),
           ),
           const SizedBox(width: 16),
@@ -124,15 +147,16 @@ class ProductFilter extends StatelessWidget {
             size: 20,
             color: Colors.grey[600],
           ),
-          items: items.map((item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(
-                displayMap?[item] ?? item,
-                style: const TextStyle(fontSize: 13),
-              ),
-            );
-          }).toList(),
+          items:
+              items.map((item) {
+                return DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    displayMap?[item] ?? item,
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                );
+              }).toList(),
           onChanged: onChanged,
         ),
       ),

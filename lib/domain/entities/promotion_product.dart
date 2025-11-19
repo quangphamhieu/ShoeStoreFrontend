@@ -13,4 +13,3 @@ class PromotionProduct {
     required this.discountPercent,
   });
 }
-

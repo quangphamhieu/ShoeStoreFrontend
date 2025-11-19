@@ -19,10 +19,18 @@ class ReceiptTable extends StatelessWidget {
             constraints: BoxConstraints(minWidth: constraints.maxWidth),
             child: DataTable(
               columnSpacing: 20,
-              headingTextStyle: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1F2933)),
-              dataTextStyle: const TextStyle(fontSize: 14, color: Color(0xFF334155)),
+              headingTextStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1F2933),
+              ),
+              dataTextStyle: const TextStyle(
+                fontSize: 14,
+                color: Color(0xFF334155),
+              ),
               dividerThickness: 0.3,
-              headingRowColor: MaterialStateProperty.all(const Color(0xFFF1F5F9)),
+              headingRowColor: MaterialStateProperty.all(
+                const Color(0xFFF1F5F9),
+              ),
               dataRowColor: MaterialStateProperty.resolveWith((states) {
                 if (states.contains(MaterialState.selected)) {
                   return const Color(0xFFEFF6FF);
@@ -41,53 +49,71 @@ class ReceiptTable extends StatelessWidget {
                 DataColumn(label: Text('Tổng tiền')),
                 DataColumn(label: Text('Trạng thái')),
               ],
-              rows: receipts.map((r) {
-                final selected = provider.selectedReceiptId == r.id;
-                return DataRow(
-                  selected: selected,
-                  cells: [
-                    DataCell(
-                      Center(
-                        child: Checkbox(
-                          value: selected,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                          onChanged: (v) {
-                            if (v == true) {
-                              provider.selectReceipt(r.id);
-                            } else {
-                              provider.selectReceipt(null);
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                    DataCell(Text(r.id.toString())),
-                    DataCell(Text(r.receiptNumber)),
-                    DataCell(Text(r.supplierName ?? '-')),
-                    DataCell(Text(r.storeName ?? '-')),
-                    DataCell(Text(r.creatorName ?? '-')),
-                    DataCell(Text('${r.createdAt.day}/${r.createdAt.month}/${r.createdAt.year}')),
-                    DataCell(Center(child: Text(r.details.length.toString()))),
-                    DataCell(Text('${r.totalAmount.toStringAsFixed(0)} đ')),
-                    DataCell(
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: r.statusId == 1 ? const Color(0xFFEFFAF3) : const Color(0xFFFFF1F2),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          r.statusId == 1 ? 'Chờ nhận' : 'Đã nhận',
-                          style: TextStyle(
-                            color: r.statusId == 1 ? const Color(0xFF0F9D58) : const Color(0xFFDC2626),
-                            fontWeight: FontWeight.w600,
+              rows:
+                  receipts.map((r) {
+                    final selected = provider.selectedReceiptId == r.id;
+                    return DataRow(
+                      selected: selected,
+                      cells: [
+                        DataCell(
+                          Center(
+                            child: Checkbox(
+                              value: selected,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              onChanged: (v) {
+                                if (v == true) {
+                                  provider.selectReceipt(r.id);
+                                } else {
+                                  provider.selectReceipt(null);
+                                }
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
+                        DataCell(Text(r.id.toString())),
+                        DataCell(Text(r.receiptNumber)),
+                        DataCell(Text(r.supplierName ?? '-')),
+                        DataCell(Text(r.storeName ?? '-')),
+                        DataCell(Text(r.creatorName ?? '-')),
+                        DataCell(
+                          Text(
+                            '${r.createdAt.day}/${r.createdAt.month}/${r.createdAt.year}',
+                          ),
+                        ),
+                        DataCell(
+                          Center(child: Text(r.details.length.toString())),
+                        ),
+                        DataCell(Text('${r.totalAmount.toStringAsFixed(0)} đ')),
+                        DataCell(
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color:
+                                  r.statusId == 1
+                                      ? const Color(0xFFEFFAF3)
+                                      : const Color(0xFFFFF1F2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              r.statusId == 1 ? 'Chờ nhận' : 'Đã nhận',
+                              style: TextStyle(
+                                color:
+                                    r.statusId == 1
+                                        ? const Color(0xFF0F9D58)
+                                        : const Color(0xFFDC2626),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
             ),
           ),
         );
@@ -95,4 +121,3 @@ class ReceiptTable extends StatelessWidget {
     );
   }
 }
-

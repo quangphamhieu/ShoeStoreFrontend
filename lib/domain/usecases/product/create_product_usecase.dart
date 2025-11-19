@@ -18,20 +18,18 @@ class CreateProductUseCase {
     String? imageFilePath,
     List<int>? imageBytes,
     String? imageFileName,
-  }) =>
-      repository.create(
-        name: name,
-        brandId: brandId,
-        supplierId: supplierId,
-        costPrice: costPrice,
-        originalPrice: originalPrice,
-        color: color,
-        size: size,
-        description: description,
-        imageUrl: imageUrl,
-        imageFilePath: imageFilePath,
-        imageBytes: imageBytes,
-        imageFileName: imageFileName,
-      );
+  }) => repository.create(
+    name: name,
+    brandId: brandId,
+    supplierId: supplierId,
+    costPrice: costPrice,
+    originalPrice: originalPrice,
+    color: color,
+    size: size,
+    description: description,
+    imageUrl: imageUrl,
+    imageFilePath: imageFilePath,
+    imageBytes: imageBytes,
+    imageFileName: imageFileName,
+  );
 }
-

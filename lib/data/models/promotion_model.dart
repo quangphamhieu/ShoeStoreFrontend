@@ -17,10 +17,22 @@ class PromotionModel extends Promotion {
 
   factory PromotionModel.fromJson(Map<String, dynamic> json) {
     final productsJson = json['products'] as List<dynamic>?;
-    final products = productsJson?.map((p) => PromotionProductModel.fromJson(p as Map<String, dynamic>)).toList() ?? [];
+    final products =
+        productsJson
+            ?.map(
+              (p) => PromotionProductModel.fromJson(p as Map<String, dynamic>),
+            )
+            .toList() ??
+        [];
 
     final storesJson = json['stores'] as List<dynamic>?;
-    final stores = storesJson?.map((s) => PromotionStoreModel.fromJson(s as Map<String, dynamic>)).toList() ?? [];
+    final stores =
+        storesJson
+            ?.map(
+              (s) => PromotionStoreModel.fromJson(s as Map<String, dynamic>),
+            )
+            .toList() ??
+        [];
 
     return PromotionModel(
       id: json['id'] as int,
@@ -44,7 +56,8 @@ class PromotionModel extends Promotion {
       'endDate': endDate.toIso8601String(),
       'statusId': statusId,
       'statusName': statusName,
-      'products': products.map((p) => (p as PromotionProductModel).toJson()).toList(),
+      'products':
+          products.map((p) => (p as PromotionProductModel).toJson()).toList(),
       'stores': stores.map((s) => (s as PromotionStoreModel).toJson()).toList(),
     };
   }
@@ -55,13 +68,19 @@ class PromotionModel extends Promotion {
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
       'statusId': statusId,
-      'products': products.map((p) => {
-        'productId': p.productId,
-        'discountPercent': p.discountPercent,
-      }).toList(),
-      'stores': stores.isNotEmpty ? stores.map((s) => {
-        'storeId': s.storeId,
-      }).toList() : null,
+      'products':
+          products
+              .map(
+                (p) => {
+                  'productId': p.productId,
+                  'discountPercent': p.discountPercent,
+                },
+              )
+              .toList(),
+      'stores':
+          stores.isNotEmpty
+              ? stores.map((s) => {'storeId': s.storeId}).toList()
+              : null,
     };
   }
 
@@ -71,13 +90,19 @@ class PromotionModel extends Promotion {
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
       'statusId': statusId,
-      'products': products.map((p) => {
-        'productId': p.productId,
-        'discountPercent': p.discountPercent,
-      }).toList(),
-      'stores': stores.isNotEmpty ? stores.map((s) => {
-        'storeId': s.storeId,
-      }).toList() : null,
+      'products':
+          products
+              .map(
+                (p) => {
+                  'productId': p.productId,
+                  'discountPercent': p.discountPercent,
+                },
+              )
+              .toList(),
+      'stores':
+          stores.isNotEmpty
+              ? stores.map((s) => {'storeId': s.storeId}).toList()
+              : null,
     };
   }
 }
@@ -91,37 +116,35 @@ class PromotionProductModel extends PromotionProduct {
     required super.discountPercent,
   });
 
-  factory PromotionProductModel.fromJson(Map<String, dynamic> json) => PromotionProductModel(
+  factory PromotionProductModel.fromJson(Map<String, dynamic> json) =>
+      PromotionProductModel(
         productId: json['productId'] as int,
         productName: json['productName'] as String,
         sku: json['sku'] as String?,
-        salePrice: json['salePrice'] != null ? (json['salePrice'] as num).toDouble() : null,
+        salePrice:
+            json['salePrice'] != null
+                ? (json['salePrice'] as num).toDouble()
+                : null,
         discountPercent: (json['discountPercent'] as num).toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
-        'productId': productId,
-        'productName': productName,
-        'sku': sku,
-        'salePrice': salePrice,
-        'discountPercent': discountPercent,
-      };
+    'productId': productId,
+    'productName': productName,
+    'sku': sku,
+    'salePrice': salePrice,
+    'discountPercent': discountPercent,
+  };
 }
 
 class PromotionStoreModel extends PromotionStore {
-  PromotionStoreModel({
-    required super.storeId,
-    super.storeName,
-  });
+  PromotionStoreModel({required super.storeId, super.storeName});
 
-  factory PromotionStoreModel.fromJson(Map<String, dynamic> json) => PromotionStoreModel(
+  factory PromotionStoreModel.fromJson(Map<String, dynamic> json) =>
+      PromotionStoreModel(
         storeId: json['storeId'] as int,
         storeName: json['storeName'] as String?,
       );
 
-  Map<String, dynamic> toJson() => {
-        'storeId': storeId,
-        'storeName': storeName,
-      };
+  Map<String, dynamic> toJson() => {'storeId': storeId, 'storeName': storeName};
 }
-

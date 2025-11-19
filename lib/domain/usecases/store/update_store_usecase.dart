@@ -12,15 +12,12 @@ class UpdateStoreUseCase {
     required String address,
     required String phone,
     required int statusId,
-  }) =>
-      repository.update(
-        id,
-        name: name,
-        code: code,
-        address: address,
-        phone: phone,
-        statusId: statusId,
-      );
+  }) => repository.update(
+    id,
+    name: name,
+    code: code,
+    address: address,
+    phone: phone,
+    statusId: statusId,
+  );
 }
-
-

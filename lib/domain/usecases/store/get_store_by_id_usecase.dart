@@ -7,5 +7,3 @@ class GetStoreByIdUseCase {
 
   Future<Store?> call(int id) => repository.getById(id);
 }
-
-

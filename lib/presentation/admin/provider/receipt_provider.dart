@@ -39,11 +39,14 @@ class ReceiptProvider extends ChangeNotifier {
   List<Receipt> get filteredReceipts {
     if (_search.isEmpty) return _receipts;
     final q = _search.toLowerCase();
-    return _receipts.where((r) => 
-      r.receiptNumber.toLowerCase().contains(q) || 
-      (r.supplierName ?? '').toLowerCase().contains(q) ||
-      (r.storeName ?? '').toLowerCase().contains(q)
-    ).toList();
+    return _receipts
+        .where(
+          (r) =>
+              r.receiptNumber.toLowerCase().contains(q) ||
+              (r.supplierName ?? '').toLowerCase().contains(q) ||
+              (r.storeName ?? '').toLowerCase().contains(q),
+        )
+        .toList();
   }
 
   Future<void> loadAll() async {
@@ -116,10 +119,7 @@ class ReceiptProvider extends ChangeNotifier {
     required List<Map<String, dynamic>> details,
   }) async {
     try {
-      await updateReceivedUseCase.call(
-        id,
-        details: details,
-      );
+      await updateReceivedUseCase.call(id, details: details);
       await loadAll();
       return true;
     } catch (e) {
@@ -137,4 +137,3 @@ class ReceiptProvider extends ChangeNotifier {
     return result;
   }
 }
-

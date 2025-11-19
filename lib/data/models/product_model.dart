@@ -18,40 +18,71 @@ class ProductModel extends Product {
     required DateTime createdAt,
     List<StoreQuantity> stores = const [],
   }) : super(
-          id: id,
-          sku: sku,
-          name: name,
-          brandId: brandId,
-          supplierId: supplierId,
-          costPrice: costPrice,
-          originalPrice: originalPrice,
-          color: color,
-          size: size,
-          description: description,
-          imageUrl: imageUrl,
-          statusId: statusId,
-          createdAt: createdAt,
-          stores: stores,
-        );
+         id: id,
+         sku: sku,
+         name: name,
+         brandId: brandId,
+         supplierId: supplierId,
+         costPrice: costPrice,
+         originalPrice: originalPrice,
+         color: color,
+         size: size,
+         description: description,
+         imageUrl: imageUrl,
+         statusId: statusId,
+         createdAt: createdAt,
+         stores: stores,
+       );
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     final storesJson = json['stores'] as List<dynamic>?;
-    final stores = storesJson?.map((s) => StoreQuantityModel.fromJson(s as Map<String, dynamic>)).toList() ?? [];
+    final stores =
+        storesJson
+            ?.map((s) => StoreQuantityModel.fromJson(s as Map<String, dynamic>))
+            .toList() ??
+        [];
+
+    // Xử lý imageUrl an toàn
+    String? imageUrl;
+    if (json['imageUrl'] != null) {
+      final url = json['imageUrl'].toString().trim();
+      imageUrl = url.isNotEmpty ? url : null;
+    }
 
     return ProductModel(
-      id: json['id'] as int,
-      sku: json['sku'] as String?,
-      name: json['name'] as String,
-      brandId: json['brandId'] as int?,
-      supplierId: json['supplierId'] as int?,
-      costPrice: (json['costPrice'] as num).toDouble(),
-      originalPrice: (json['originalPrice'] as num).toDouble(),
-      color: json['color'] as String?,
-      size: json['size'] as String?,
-      description: json['description'] as String?,
-      imageUrl: json['imageUrl'] as String?,
-      statusId: json['statusId'] as int? ?? 1,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      id: json['id'] is int ? json['id'] as int : (json['id'] as num).toInt(),
+      sku: json['sku']?.toString(),
+      name: json['name']?.toString() ?? '',
+      brandId:
+          json['brandId'] is int
+              ? json['brandId'] as int
+              : (json['brandId'] is num
+                  ? (json['brandId'] as num).toInt()
+                  : null),
+      supplierId:
+          json['supplierId'] is int
+              ? json['supplierId'] as int
+              : (json['supplierId'] is num
+                  ? (json['supplierId'] as num).toInt()
+                  : null),
+      costPrice: (json['costPrice'] as num?)?.toDouble() ?? 0.0,
+      originalPrice: (json['originalPrice'] as num?)?.toDouble() ?? 0.0,
+      color: json['color']?.toString(),
+      size: json['size']?.toString(),
+      description: json['description']?.toString(),
+      imageUrl: imageUrl,
+      statusId:
+          json['statusId'] is int
+              ? json['statusId'] as int
+              : (json['statusId'] is num
+                  ? (json['statusId'] as num).toInt()
+                  : 1),
+      createdAt:
+          json['createdAt'] != null
+              ? (json['createdAt'] is String
+                  ? DateTime.parse(json['createdAt'] as String)
+                  : DateTime.now())
+              : DateTime.now(),
       stores: stores,
     );
   }
@@ -63,13 +94,18 @@ class StoreQuantityModel extends StoreQuantity {
     required String storeName,
     required int quantity,
     required double salePrice,
-  }) : super(storeId: storeId, storeName: storeName, quantity: quantity, salePrice: salePrice);
+  }) : super(
+         storeId: storeId,
+         storeName: storeName,
+         quantity: quantity,
+         salePrice: salePrice,
+       );
 
-  factory StoreQuantityModel.fromJson(Map<String, dynamic> json) => StoreQuantityModel(
+  factory StoreQuantityModel.fromJson(Map<String, dynamic> json) =>
+      StoreQuantityModel(
         storeId: json['storeId'] as int,
         storeName: json['storeName'] as String,
         quantity: json['quantity'] as int,
         salePrice: (json['salePrice'] as num?)?.toDouble() ?? 0,
       );
 }
-

@@ -9,11 +9,9 @@ class CreateReceiptUseCase {
     required int supplierId,
     int? storeId,
     required List<Map<String, dynamic>> details,
-  }) =>
-      repository.create(
-        supplierId: supplierId,
-        storeId: storeId,
-        details: details,
-      );
+  }) => repository.create(
+    supplierId: supplierId,
+    storeId: storeId,
+    details: details,
+  );
 }
-

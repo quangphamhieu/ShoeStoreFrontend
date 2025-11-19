@@ -5,4 +5,3 @@ abstract class NotificationRepository {
   Future<Notification?> getById(int id);
   Future<bool> delete(int id);
 }
-

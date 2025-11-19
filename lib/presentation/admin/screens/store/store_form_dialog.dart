@@ -58,7 +58,11 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
     super.dispose();
   }
 
-  InputDecoration _decoration(String label, {String? hint, bool required = false}) {
+  InputDecoration _decoration(
+    String label, {
+    String? hint,
+    bool required = false,
+  }) {
     final suffix = required ? ' *' : '';
     return InputDecoration(
       labelText: '$label$suffix',
@@ -98,15 +102,31 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
           TextFormField(
             controller: _codeController,
             textInputAction: TextInputAction.next,
-            decoration: _decoration('Mã cửa hàng', hint: 'Nhập mã định danh', required: true),
-            validator: (value) => (value == null || value.trim().isEmpty) ? 'Vui lòng nhập mã cửa hàng' : null,
+            decoration: _decoration(
+              'Mã cửa hàng',
+              hint: 'Nhập mã định danh',
+              required: true,
+            ),
+            validator:
+                (value) =>
+                    (value == null || value.trim().isEmpty)
+                        ? 'Vui lòng nhập mã cửa hàng'
+                        : null,
           ),
           const SizedBox(height: 14),
           TextFormField(
             controller: _nameController,
             textInputAction: TextInputAction.next,
-            decoration: _decoration('Tên cửa hàng', hint: 'Nhập tên hiển thị', required: true),
-            validator: (value) => (value == null || value.trim().isEmpty) ? 'Vui lòng nhập tên cửa hàng' : null,
+            decoration: _decoration(
+              'Tên cửa hàng',
+              hint: 'Nhập tên hiển thị',
+              required: true,
+            ),
+            validator:
+                (value) =>
+                    (value == null || value.trim().isEmpty)
+                        ? 'Vui lòng nhập tên cửa hàng'
+                        : null,
           ),
           const SizedBox(height: 14),
           TextFormField(
@@ -114,14 +134,26 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
             textInputAction: TextInputAction.next,
             minLines: 1,
             maxLines: 3,
-            decoration: _decoration('Địa chỉ', hint: 'Nhập địa chỉ cụ thể', required: true),
-            validator: (value) => (value == null || value.trim().isEmpty) ? 'Vui lòng nhập địa chỉ' : null,
+            decoration: _decoration(
+              'Địa chỉ',
+              hint: 'Nhập địa chỉ cụ thể',
+              required: true,
+            ),
+            validator:
+                (value) =>
+                    (value == null || value.trim().isEmpty)
+                        ? 'Vui lòng nhập địa chỉ'
+                        : null,
           ),
           const SizedBox(height: 14),
           TextFormField(
             controller: _phoneController,
             textInputAction: TextInputAction.done,
-            decoration: _decoration('Số điện thoại', hint: 'Nhập số liên hệ', required: true),
+            decoration: _decoration(
+              'Số điện thoại',
+              hint: 'Nhập số liên hệ',
+              required: true,
+            ),
             keyboardType: TextInputType.phone,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
@@ -175,7 +207,12 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
         );
       }
     } else {
-      success = await provider.createStore(name: name, code: code, address: address, phone: phone);
+      success = await provider.createStore(
+        name: name,
+        code: code,
+        address: address,
+        phone: phone,
+      );
     }
 
     if (!mounted) return;
@@ -185,7 +222,13 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(widget.editMode ? 'Cập nhật cửa hàng thất bại' : 'Thêm cửa hàng thất bại')),
+        SnackBar(
+          content: Text(
+            widget.editMode
+                ? 'Cập nhật cửa hàng thất bại'
+                : 'Thêm cửa hàng thất bại',
+          ),
+        ),
       );
     }
   }
@@ -222,8 +265,13 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.editMode ? 'Cập nhật cửa hàng' : 'Thêm cửa hàng mới',
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                          widget.editMode
+                              ? 'Cập nhật cửa hàng'
+                              : 'Thêm cửa hàng mới',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -233,8 +281,14 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
                       ],
                     ),
                     IconButton(
-                      onPressed: _loading ? null : () => Navigator.of(context).pop(false),
-                      icon: const Icon(Icons.close_rounded, color: Color(0xFF94A3B8)),
+                      onPressed:
+                          _loading
+                              ? null
+                              : () => Navigator.of(context).pop(false),
+                      icon: const Icon(
+                        Icons.close_rounded,
+                        color: Color(0xFF94A3B8),
+                      ),
                     ),
                   ],
                 ),
@@ -251,9 +305,15 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: _loading ? null : () => Navigator.of(context).pop(false),
+                      onPressed:
+                          _loading
+                              ? null
+                              : () => Navigator.of(context).pop(false),
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 14,
+                        ),
                         foregroundColor: const Color(0xFF64748B),
                       ),
                       child: const Text('Hủy'),
@@ -262,14 +322,34 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
                     ElevatedButton(
                       onPressed: _prefillLoading ? null : _submit,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: widget.editMode ? const Color(0xFF87CEEB) : const Color(0xFF2563EB),
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        backgroundColor:
+                            widget.editMode
+                                ? const Color(0xFF87CEEB)
+                                : const Color(0xFF2563EB),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 14,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                         elevation: 0,
                       ),
-                      child: _loading
-                          ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                          : Text(widget.editMode ? 'Lưu thay đổi' : 'Tạo cửa hàng'),
+                      child:
+                          _loading
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                              : Text(
+                                widget.editMode
+                                    ? 'Lưu thay đổi'
+                                    : 'Tạo cửa hàng',
+                              ),
                     ),
                   ],
                 ),
@@ -281,5 +361,3 @@ class _StoreFormDialogState extends State<StoreFormDialog> {
     );
   }
 }
-
-

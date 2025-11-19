@@ -19,7 +19,8 @@ class NotificationProvider extends ChangeNotifier {
   List<domain.Notification> get notifications => _notifications;
 
   Set<int> _readNotificationIds = {}; // IDs của notifications đã đọc
-  DateTime? _lastReadTime; // Thời điểm user click vào notification icon lần cuối
+  DateTime?
+  _lastReadTime; // Thời điểm user click vào notification icon lần cuối
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -31,14 +32,18 @@ class NotificationProvider extends ChangeNotifier {
       return _notifications.length;
     }
     // Đếm số notifications được tạo sau thời điểm đọc cuối cùng
-    return _notifications.where((n) => n.createdAt.isAfter(_lastReadTime!)).length;
+    return _notifications
+        .where((n) => n.createdAt.isAfter(_lastReadTime!))
+        .length;
   }
 
   List<domain.Notification> get unreadNotifications {
     if (_lastReadTime == null) {
       return _notifications;
     }
-    return _notifications.where((n) => n.createdAt.isAfter(_lastReadTime!)).toList();
+    return _notifications
+        .where((n) => n.createdAt.isAfter(_lastReadTime!))
+        .toList();
   }
 
   Future<void> loadAll() async {
@@ -87,4 +92,3 @@ class NotificationProvider extends ChangeNotifier {
     // Sẽ được implement nếu cần
   }
 }
-

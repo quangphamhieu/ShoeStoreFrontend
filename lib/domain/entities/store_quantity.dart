@@ -11,4 +11,3 @@ class StoreQuantity {
     required this.salePrice,
   });
 }
-

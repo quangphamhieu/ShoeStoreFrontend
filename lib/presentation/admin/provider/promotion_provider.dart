@@ -36,10 +36,13 @@ class PromotionProvider extends ChangeNotifier {
   List<Promotion> get filteredPromotions {
     if (_search.isEmpty) return _promotions;
     final q = _search.toLowerCase();
-    return _promotions.where((p) => 
-      p.name.toLowerCase().contains(q) || 
-      (p.code ?? '').toLowerCase().contains(q)
-    ).toList();
+    return _promotions
+        .where(
+          (p) =>
+              p.name.toLowerCase().contains(q) ||
+              (p.code ?? '').toLowerCase().contains(q),
+        )
+        .toList();
   }
 
   Future<void> loadAll() async {
@@ -129,4 +132,3 @@ class PromotionProvider extends ChangeNotifier {
     return result;
   }
 }
-

@@ -15,4 +15,3 @@ class Notification {
     required this.createdAt,
   });
 }
-

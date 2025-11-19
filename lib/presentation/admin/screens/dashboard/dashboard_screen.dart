@@ -10,9 +10,7 @@ class DashboardScreen extends StatelessWidget {
       body: Row(
         children: const [
           SideMenu(),
-          Expanded(
-            child: Center(child: Text('Dashboard content here')),
-          ),
+          Expanded(child: Center(child: Text('Dashboard content here'))),
         ],
       ),
     );

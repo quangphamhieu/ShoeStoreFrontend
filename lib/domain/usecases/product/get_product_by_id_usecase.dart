@@ -7,4 +7,3 @@ class GetProductByIdUseCase {
 
   Future<Product?> call(int id) => repository.getById(id);
 }
-

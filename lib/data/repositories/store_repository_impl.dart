@@ -7,8 +7,18 @@ class StoreRepositoryImpl implements StoreRepository {
   StoreRepositoryImpl(this.remote);
 
   @override
-  Future<Store> create({required String name, required String code, required String address, required String phone}) {
-    return remote.create(name: name, code: code, address: address, phone: phone);
+  Future<Store> create({
+    required String name,
+    required String code,
+    required String address,
+    required String phone,
+  }) {
+    return remote.create(
+      name: name,
+      code: code,
+      address: address,
+      phone: phone,
+    );
   }
 
   @override
@@ -27,9 +37,21 @@ class StoreRepositoryImpl implements StoreRepository {
   }
 
   @override
-  Future<Store?> update(int id, {required String name, required String code, required String address, required String phone, required int statusId}) {
-    return remote.update(id, name: name, code: code, address: address, phone: phone, statusId: statusId);
+  Future<Store?> update(
+    int id, {
+    required String name,
+    required String code,
+    required String address,
+    required String phone,
+    required int statusId,
+  }) {
+    return remote.update(
+      id,
+      name: name,
+      code: code,
+      address: address,
+      phone: phone,
+      statusId: statusId,
+    );
   }
 }
-
-

@@ -17,7 +17,11 @@ class SupplierRepositoryImpl implements SupplierRepository {
   }
 
   @override
-  Future<Supplier> create({required String name, String? code, String? contactInfo}) async {
+  Future<Supplier> create({
+    required String name,
+    String? code,
+    String? contactInfo,
+  }) async {
     return await remote.create(name, code: code, contactInfo: contactInfo);
   }
 
@@ -27,8 +31,19 @@ class SupplierRepositoryImpl implements SupplierRepository {
   }
 
   @override
-  Future<Supplier?> update(int id, {required String name, String? code, String? contactInfo, required int statusId}) async {
-    return await remote.update(id, name: name, code: code, contactInfo: contactInfo, statusId: statusId);
+  Future<Supplier?> update(
+    int id, {
+    required String name,
+    String? code,
+    String? contactInfo,
+    required int statusId,
+  }) async {
+    return await remote.update(
+      id,
+      name: name,
+      code: code,
+      contactInfo: contactInfo,
+      statusId: statusId,
+    );
   }
 }
-

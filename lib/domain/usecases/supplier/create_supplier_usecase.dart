@@ -5,7 +5,9 @@ class CreateSupplierUseCase {
   final SupplierRepository repository;
   CreateSupplierUseCase(this.repository);
 
-  Future<Supplier> call({required String name, String? code, String? contactInfo}) =>
-      repository.create(name: name, code: code, contactInfo: contactInfo);
+  Future<Supplier> call({
+    required String name,
+    String? code,
+    String? contactInfo,
+  }) => repository.create(name: name, code: code, contactInfo: contactInfo);
 }
-

@@ -41,7 +41,10 @@ class StoreProvider extends ChangeNotifier {
       final name = store.name.toLowerCase();
       final address = store.address?.toLowerCase() ?? '';
       final phone = store.phone?.toLowerCase() ?? '';
-      return code.contains(keyword) || name.contains(keyword) || address.contains(keyword) || phone.contains(keyword);
+      return code.contains(keyword) ||
+          name.contains(keyword) ||
+          address.contains(keyword) ||
+          phone.contains(keyword);
     }).toList();
   }
 
@@ -80,7 +83,12 @@ class StoreProvider extends ChangeNotifier {
     required String phone,
   }) async {
     try {
-      await createUseCase.call(name: name, code: code, address: address, phone: phone);
+      await createUseCase.call(
+        name: name,
+        code: code,
+        address: address,
+        phone: phone,
+      );
       await loadAll();
       return true;
     } catch (_) {
@@ -123,5 +131,3 @@ class StoreProvider extends ChangeNotifier {
     return deleted;
   }
 }
-
-

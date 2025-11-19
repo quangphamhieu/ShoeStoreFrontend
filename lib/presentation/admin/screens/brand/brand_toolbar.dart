@@ -44,7 +44,10 @@ class BrandToolbar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 14,
+                  horizontal: 16,
+                ),
               ),
             ),
           );
@@ -62,15 +65,28 @@ class BrandToolbar extends StatelessWidget {
                         builder: (_) => const BrandFormDialog(editMode: true),
                       );
                       if (success == true && context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cập nhật thành công')));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Cập nhật thành công')),
+                        );
                       }
                     },
-                    icon: const Icon(Icons.edit_outlined, color: Color(0xFF2563EB)),
-                    label: const Text('Sửa', style: TextStyle(color: Color(0xFF2563EB))),
+                    icon: const Icon(
+                      Icons.edit_outlined,
+                      color: Color(0xFF2563EB),
+                    ),
+                    label: const Text(
+                      'Sửa',
+                      style: TextStyle(color: Color(0xFF2563EB)),
+                    ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFFBFDBFE)),
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),
@@ -79,20 +95,41 @@ class BrandToolbar extends StatelessWidget {
                   message: 'Xóa thương hiệu',
                   child: OutlinedButton.icon(
                     onPressed: () async {
-                      final confirm = await showConfirmDeleteDialog(context, title: 'Xác nhận', content: 'Bạn có chắc muốn xóa thương hiệu này?');
+                      final confirm = await showConfirmDeleteDialog(
+                        context,
+                        title: 'Xác nhận',
+                        content: 'Bạn có chắc muốn xóa thương hiệu này?',
+                      );
                       if (confirm == true) {
                         final ok = await provider.deleteSelectedBrand();
                         if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ok ? 'Xóa thành công' : 'Xóa thất bại')));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                ok ? 'Xóa thành công' : 'Xóa thất bại',
+                              ),
+                            ),
+                          );
                         }
                       }
                     },
-                    icon: const Icon(Icons.delete_outline, color: Color(0xFFDC2626)),
-                    label: const Text('Xóa', style: TextStyle(color: Color(0xFFDC2626))),
+                    icon: const Icon(
+                      Icons.delete_outline,
+                      color: Color(0xFFDC2626),
+                    ),
+                    label: const Text(
+                      'Xóa',
+                      style: TextStyle(color: Color(0xFFDC2626)),
+                    ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFFFECACA)),
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),
@@ -105,16 +142,31 @@ class BrandToolbar extends StatelessWidget {
                     builder: (_) => const BrandFormDialog(editMode: false),
                   );
                   if (created == true && context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Thêm thương hiệu thành công')));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Thêm thương hiệu thành công'),
+                      ),
+                    );
                   }
                 },
                 icon: const Icon(Icons.add, size: 20, color: Colors.black),
-                label: const Text('Thêm mới', style: TextStyle(color: Colors.black)),
+                label: const Text(
+                  'Thêm mới',
+                  style: TextStyle(color: Colors.black),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF90EE90),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                  textStyle: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 14,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
                   elevation: 0,
                 ),
               ),
@@ -127,7 +179,9 @@ class BrandToolbar extends StatelessWidget {
               children: [
                 Text(
                   'Quản lý Thương hiệu',
-                  style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 searchField,
@@ -145,12 +199,16 @@ class BrandToolbar extends StatelessWidget {
                   children: [
                     Text(
                       'Quản lý Thương hiệu',
-                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       'Theo dõi, cập nhật và quản lý danh sách thương hiệu trong cửa hàng',
-                      style: theme.textTheme.bodyMedium?.copyWith(color: const Color(0xFF94A3B8)),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: const Color(0xFF94A3B8),
+                      ),
                     ),
                   ],
                 ),

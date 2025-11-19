@@ -18,10 +18,9 @@ class SignUpProvider extends ChangeNotifier {
   User? user;
 
   void setGender(String value) {
-    if(value == "Nam") {
+    if (value == "Nam") {
       gender = 0;
-    }
-    else {
+    } else {
       gender = 1;
     }
     notifyListeners();

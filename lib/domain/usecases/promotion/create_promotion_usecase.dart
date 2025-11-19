@@ -12,14 +12,12 @@ class CreatePromotionUseCase {
     required int statusId,
     required List<Map<String, dynamic>> products,
     required List<int> storeIds,
-  }) =>
-      repository.create(
-        name: name,
-        startDate: startDate,
-        endDate: endDate,
-        statusId: statusId,
-        products: products,
-        storeIds: storeIds,
-      );
+  }) => repository.create(
+    name: name,
+    startDate: startDate,
+    endDate: endDate,
+    statusId: statusId,
+    products: products,
+    storeIds: storeIds,
+  );
 }
-

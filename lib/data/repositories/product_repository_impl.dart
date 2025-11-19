@@ -111,13 +111,36 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<StoreQuantity?> createStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
-    return await remote.createStoreQuantity(productId, storeId, quantity, salePrice: salePrice, storeName: storeName);
+  Future<StoreQuantity?> createStoreQuantity(
+    int productId,
+    int storeId,
+    int quantity, {
+    double? salePrice,
+    String? storeName,
+  }) async {
+    return await remote.createStoreQuantity(
+      productId,
+      storeId,
+      quantity,
+      salePrice: salePrice,
+      storeName: storeName,
+    );
   }
 
   @override
-  Future<StoreQuantity?> updateStoreQuantity(int productId, int storeId, int quantity, {double? salePrice, String? storeName}) async {
-    return await remote.updateStoreQuantity(productId, storeId, quantity, salePrice: salePrice, storeName: storeName);
+  Future<StoreQuantity?> updateStoreQuantity(
+    int productId,
+    int storeId,
+    int quantity, {
+    double? salePrice,
+    String? storeName,
+  }) async {
+    return await remote.updateStoreQuantity(
+      productId,
+      storeId,
+      quantity,
+      salePrice: salePrice,
+      storeName: storeName,
+    );
   }
 }
-

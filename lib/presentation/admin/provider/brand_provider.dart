@@ -36,7 +36,13 @@ class BrandProvider extends ChangeNotifier {
   List<Brand> get filteredBrands {
     if (_search.isEmpty) return _brands;
     final q = _search.toLowerCase();
-    return _brands.where((b) => (b.name.toLowerCase().contains(q) || (b.code ?? '').toLowerCase().contains(q))).toList();
+    return _brands
+        .where(
+          (b) =>
+              (b.name.toLowerCase().contains(q) ||
+                  (b.code ?? '').toLowerCase().contains(q)),
+        )
+        .toList();
   }
 
   Future<void> loadAll() async {
@@ -66,9 +72,17 @@ class BrandProvider extends ChangeNotifier {
     return await getByIdUseCase.call(_selectedBrandId!);
   }
 
-  Future<bool> createBrand({required String name, String? code, String? description}) async {
+  Future<bool> createBrand({
+    required String name,
+    String? code,
+    String? description,
+  }) async {
     try {
-      final created = await createUseCase.call(name: name, code: code, description: description);
+      final created = await createUseCase.call(
+        name: name,
+        code: code,
+        description: description,
+      );
       await loadAll();
       return true;
     } catch (e) {
@@ -76,9 +90,21 @@ class BrandProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateBrand(int id, {required String name, String? code, String? description, required int statusId}) async {
+  Future<bool> updateBrand(
+    int id, {
+    required String name,
+    String? code,
+    String? description,
+    required int statusId,
+  }) async {
     try {
-      final updated = await updateUseCase.call(id, name: name, code: code, description: description, statusId: statusId);
+      final updated = await updateUseCase.call(
+        id,
+        name: name,
+        code: code,
+        description: description,
+        statusId: statusId,
+      );
       await loadAll();
       return true;
     } catch (e) {

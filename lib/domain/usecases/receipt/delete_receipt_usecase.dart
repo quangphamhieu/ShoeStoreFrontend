@@ -6,4 +6,3 @@ class DeleteReceiptUseCase {
 
   Future<bool> call(int id) => repository.delete(id);
 }
-

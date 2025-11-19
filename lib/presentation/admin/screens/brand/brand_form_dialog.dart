@@ -54,7 +54,11 @@ class _BrandFormDialogState extends State<BrandFormDialog> {
     super.dispose();
   }
 
-  InputDecoration _inputDecoration(String label, {String? hint, bool required = false}) {
+  InputDecoration _inputDecoration(
+    String label, {
+    String? hint,
+    bool required = false,
+  }) {
     final suffix = required ? ' *' : '';
     return InputDecoration(
       labelText: '$label$suffix',
@@ -93,7 +97,11 @@ class _BrandFormDialogState extends State<BrandFormDialog> {
         children: [
           TextFormField(
             controller: _codeController,
-            decoration: _inputDecoration('Mã thương hiệu', hint: 'Nhập mã định danh', required: true),
+            decoration: _inputDecoration(
+              'Mã thương hiệu',
+              hint: 'Nhập mã định danh',
+              required: true,
+            ),
             textInputAction: TextInputAction.next,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
@@ -105,7 +113,11 @@ class _BrandFormDialogState extends State<BrandFormDialog> {
           const SizedBox(height: 14),
           TextFormField(
             controller: _nameController,
-            decoration: _inputDecoration('Tên thương hiệu', hint: 'Nhập tên hiển thị', required: true),
+            decoration: _inputDecoration(
+              'Tên thương hiệu',
+              hint: 'Nhập tên hiển thị',
+              required: true,
+            ),
             textInputAction: TextInputAction.next,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
@@ -119,7 +131,11 @@ class _BrandFormDialogState extends State<BrandFormDialog> {
             controller: _descriptionController,
             maxLines: 4,
             textInputAction: TextInputAction.newline,
-            decoration: _inputDecoration('Mô tả', hint: 'Mô tả ngắn gọn về thương hiệu', required: true),
+            decoration: _inputDecoration(
+              'Mô tả',
+              hint: 'Mô tả ngắn gọn về thương hiệu',
+              required: true,
+            ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'Vui lòng nhập mô tả';
@@ -161,10 +177,20 @@ class _BrandFormDialogState extends State<BrandFormDialog> {
     if (widget.editMode) {
       final id = provider.selectedBrandId;
       if (id != null) {
-        success = await provider.updateBrand(id, name: name, code: code, description: description, statusId: _statusId);
+        success = await provider.updateBrand(
+          id,
+          name: name,
+          code: code,
+          description: description,
+          statusId: _statusId,
+        );
       }
     } else {
-      success = await provider.createBrand(name: name, code: code, description: description);
+      success = await provider.createBrand(
+        name: name,
+        code: code,
+        description: description,
+      );
     }
 
     if (!mounted) return;
@@ -175,7 +201,11 @@ class _BrandFormDialogState extends State<BrandFormDialog> {
       Navigator.of(context).pop(true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(widget.editMode ? 'Cập nhật thất bại' : 'Tạo mới thất bại')),
+        SnackBar(
+          content: Text(
+            widget.editMode ? 'Cập nhật thất bại' : 'Tạo mới thất bại',
+          ),
+        ),
       );
     }
   }
@@ -212,8 +242,13 @@ class _BrandFormDialogState extends State<BrandFormDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.editMode ? 'Cập nhật thương hiệu' : 'Thêm thương hiệu mới',
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                          widget.editMode
+                              ? 'Cập nhật thương hiệu'
+                              : 'Thêm thương hiệu mới',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -224,7 +259,10 @@ class _BrandFormDialogState extends State<BrandFormDialog> {
                     ),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      icon: const Icon(Icons.close_rounded, color: Color(0xFF94A3B8)),
+                      icon: const Icon(
+                        Icons.close_rounded,
+                        color: Color(0xFF94A3B8),
+                      ),
                       tooltip: 'Đóng',
                     ),
                   ],
@@ -242,25 +280,52 @@ class _BrandFormDialogState extends State<BrandFormDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: _loading ? null : () => Navigator.of(context).pop(false),
+                      onPressed:
+                          _loading
+                              ? null
+                              : () => Navigator.of(context).pop(false),
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 14,
+                        ),
                         foregroundColor: const Color(0xFF64748B),
                       ),
                       child: const Text('Hủy'),
                     ),
                     const SizedBox(width: 14),
                     ElevatedButton(
-                      onPressed: _prefillLoading ? null : () => _handleSubmit(context),
+                      onPressed:
+                          _prefillLoading ? null : () => _handleSubmit(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: widget.editMode ? const Color(0xFF87CEEB) : const Color(0xFF2563EB),
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        backgroundColor:
+                            widget.editMode
+                                ? const Color(0xFF87CEEB)
+                                : const Color(0xFF2563EB),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 14,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                         elevation: 0,
                       ),
-                      child: _loading
-                          ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                          : Text(widget.editMode ? 'Lưu thay đổi' : 'Tạo thương hiệu'),
+                      child:
+                          _loading
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                              : Text(
+                                widget.editMode
+                                    ? 'Lưu thay đổi'
+                                    : 'Tạo thương hiệu',
+                              ),
                     ),
                   ],
                 ),

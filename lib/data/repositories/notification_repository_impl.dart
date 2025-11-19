@@ -22,4 +22,3 @@ class NotificationRepositoryImpl implements NotificationRepository {
     return await remote.delete(id);
   }
 }
-

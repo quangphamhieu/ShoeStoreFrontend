@@ -10,22 +10,41 @@ class OrderRemoteDataSource {
     final response = await client.get(ApiEndpoint.orders);
     final data = response.data;
     if (data is List) {
-      return data.map((json) => OrderModel.fromJson(json as Map<String, dynamic>)).toList();
+      return data
+          .map((json) => OrderModel.fromJson(json as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
 
-  Future<bool> updateStatus({required int orderId, required int statusId}) async {
-    final body = {
-      'orderId': orderId,
-      'statusId': statusId,
-    };
+  Future<bool> updateStatus({
+    required int orderId,
+    required int statusId,
+  }) async {
+    final body = {'orderId': orderId, 'statusId': statusId};
     final response = await client.put('${ApiEndpoint.orders}/status', body);
     final successCodes = {200, 204};
     return successCodes.contains(response.statusCode);
   }
+
+  Future<bool> updateDetail({
+    required int orderDetailId,
+    required int quantity,
+  }) async {
+    final body = {'quantity': quantity};
+    final response = await client.put(
+      '${ApiEndpoint.orders}/detail/$orderDetailId',
+      body,
+    );
+    final successCodes = {200, 204};
+    return successCodes.contains(response.statusCode);
+  }
+
+  Future<bool> deleteDetail(int orderDetailId) async {
+    final response = await client.delete(
+      '${ApiEndpoint.orders}/detail/$orderDetailId',
+    );
+    final successCodes = {200, 204};
+    return successCodes.contains(response.statusCode);
+  }
 }
-
-
-
-

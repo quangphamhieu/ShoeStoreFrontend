@@ -21,4 +21,3 @@ class NotificationModel extends Notification {
     );
   }
 }
-

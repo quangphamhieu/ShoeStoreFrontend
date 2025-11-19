@@ -7,4 +7,3 @@ class GetAllReceiptsUseCase {
 
   Future<List<Receipt>> call() => repository.getAll();
 }
-

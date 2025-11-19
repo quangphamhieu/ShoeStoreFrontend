@@ -10,7 +10,9 @@ class NotificationRemoteDataSource {
     final response = await client.get(ApiEndpoint.notifications);
     final data = response.data;
     if (data is List) {
-      return data.map((e) => NotificationModel.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => NotificationModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
@@ -29,4 +31,3 @@ class NotificationRemoteDataSource {
     return response.statusCode == 204 || response.statusCode == 200;
   }
 }
-

@@ -43,44 +43,50 @@ class _AppHeaderState extends State<AppHeader> {
 
   void _showOverlay() {
     final overlay = Overlay.of(context);
-    final renderBox = _notificationIconKey.currentContext?.findRenderObject() as RenderBox?;
+    final renderBox =
+        _notificationIconKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
     final size = renderBox.size;
     final offset = renderBox.localToGlobal(Offset.zero);
     final screenWidth = MediaQuery.of(context).size.width;
     const panelWidth = 420.0;
-    
+
     // Tính toán vị trí: panel căn phải với icon, nhưng không vượt quá màn hình
-    final rightPosition = screenWidth - offset.dx - size.width / 2 - panelWidth / 2;
-    final adjustedRight = rightPosition < 16 ? 16.0 : rightPosition; // Tối thiểu 16px từ cạnh phải
+    final rightPosition =
+        screenWidth - offset.dx - size.width / 2 - panelWidth / 2;
+    final adjustedRight =
+        rightPosition < 16
+            ? 16.0
+            : rightPosition; // Tối thiểu 16px từ cạnh phải
 
     _overlayEntry = OverlayEntry(
-      builder: (context) => Stack(
-        children: [
-          // Backdrop để đóng panel khi click bên ngoài
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: _toggleNotificationPanel,
-              child: Container(color: Colors.transparent),
-            ),
-          ),
-          // Notification panel
-          Positioned(
-            right: adjustedRight,
-            top: offset.dy + size.height + 4,
-            child: GestureDetector(
-              onTap: () {}, // Ngăn event propagation
-              child: Material(
-                color: Colors.transparent,
-                child: NotificationPanel(
-                  onDismiss: _toggleNotificationPanel,
+      builder:
+          (context) => Stack(
+            children: [
+              // Backdrop để đóng panel khi click bên ngoài
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: _toggleNotificationPanel,
+                  child: Container(color: Colors.transparent),
                 ),
               ),
-            ),
+              // Notification panel
+              Positioned(
+                right: adjustedRight,
+                top: offset.dy + size.height + 4,
+                child: GestureDetector(
+                  onTap: () {}, // Ngăn event propagation
+                  child: Material(
+                    color: Colors.transparent,
+                    child: NotificationPanel(
+                      onDismiss: _toggleNotificationPanel,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
 
     overlay.insert(_overlayEntry!);
@@ -132,14 +138,20 @@ class _AppHeaderState extends State<AppHeader> {
             children: [
               IconButton(
                 icon: Icon(
-                  _showNotificationPanel ? Icons.notifications : Icons.notifications_outlined,
+                  _showNotificationPanel
+                      ? Icons.notifications
+                      : Icons.notifications_outlined,
                   size: 28,
-                  color: _showNotificationPanel ? const Color(0xFF2563EB) : const Color(0xFF334155),
+                  color:
+                      _showNotificationPanel
+                          ? const Color(0xFF2563EB)
+                          : const Color(0xFF334155),
                 ),
                 onPressed: _toggleNotificationPanel,
                 tooltip: 'Thông báo',
               ),
-              if (notificationProvider.unreadCount > 0 && !_showNotificationPanel)
+              if (notificationProvider.unreadCount > 0 &&
+                  !_showNotificationPanel)
                 Positioned(
                   right: 6,
                   top: 6,
@@ -176,4 +188,3 @@ class _AppHeaderState extends State<AppHeader> {
     );
   }
 }
-

@@ -7,4 +7,3 @@ class GetNotificationByIdUseCase {
 
   Future<Notification?> call(int id) => repository.getById(id);
 }
-

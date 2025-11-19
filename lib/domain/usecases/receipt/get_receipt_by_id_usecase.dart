@@ -7,4 +7,3 @@ class GetReceiptByIdUseCase {
 
   Future<Receipt?> call(int id) => repository.getById(id);
 }
-

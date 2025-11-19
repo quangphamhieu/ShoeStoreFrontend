@@ -8,7 +8,3 @@ class UpdateOrderStatusUseCase {
     return await repository.updateStatus(orderId: orderId, statusId: statusId);
   }
 }
-
-
-
-

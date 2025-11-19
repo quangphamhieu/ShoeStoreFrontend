@@ -36,11 +36,14 @@ class SupplierProvider extends ChangeNotifier {
   List<Supplier> get filteredSuppliers {
     if (_search.isEmpty) return _suppliers;
     final q = _search.toLowerCase();
-    return _suppliers.where((s) => 
-      (s.name.toLowerCase().contains(q) || 
-       (s.code ?? '').toLowerCase().contains(q) ||
-       (s.contactInfo ?? '').toLowerCase().contains(q))
-    ).toList();
+    return _suppliers
+        .where(
+          (s) =>
+              (s.name.toLowerCase().contains(q) ||
+                  (s.code ?? '').toLowerCase().contains(q) ||
+                  (s.contactInfo ?? '').toLowerCase().contains(q)),
+        )
+        .toList();
   }
 
   Future<void> loadAll() async {
@@ -70,9 +73,17 @@ class SupplierProvider extends ChangeNotifier {
     return await getByIdUseCase.call(_selectedSupplierId!);
   }
 
-  Future<bool> createSupplier({required String name, String? code, String? contactInfo}) async {
+  Future<bool> createSupplier({
+    required String name,
+    String? code,
+    String? contactInfo,
+  }) async {
     try {
-      await createUseCase.call(name: name, code: code, contactInfo: contactInfo);
+      await createUseCase.call(
+        name: name,
+        code: code,
+        contactInfo: contactInfo,
+      );
       await loadAll();
       return true;
     } catch (e) {
@@ -80,9 +91,21 @@ class SupplierProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateSupplier(int id, {required String name, String? code, String? contactInfo, required int statusId}) async {
+  Future<bool> updateSupplier(
+    int id, {
+    required String name,
+    String? code,
+    String? contactInfo,
+    required int statusId,
+  }) async {
     try {
-      await updateUseCase.call(id, name: name, code: code, contactInfo: contactInfo, statusId: statusId);
+      await updateUseCase.call(
+        id,
+        name: name,
+        code: code,
+        contactInfo: contactInfo,
+        statusId: statusId,
+      );
       await loadAll();
       return true;
     } catch (e) {
@@ -100,4 +123,3 @@ class SupplierProvider extends ChangeNotifier {
     return result;
   }
 }
-

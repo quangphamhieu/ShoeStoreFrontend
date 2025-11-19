@@ -35,7 +35,3 @@ class Order {
     required this.details,
   });
 }
-
-
-
-

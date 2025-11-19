@@ -17,7 +17,11 @@ class BrandRepositoryImpl implements BrandRepository {
   }
 
   @override
-  Future<Brand> create({required String name, String? code, String? description}) async {
+  Future<Brand> create({
+    required String name,
+    String? code,
+    String? description,
+  }) async {
     return await remote.create(name, code: code, description: description);
   }
 
@@ -27,7 +31,19 @@ class BrandRepositoryImpl implements BrandRepository {
   }
 
   @override
-  Future<Brand?> update(int id, {required String name, String? code, String? description, required int statusId}) async {
-    return await remote.update(id, name: name, code: code, description: description, statusId: statusId);
+  Future<Brand?> update(
+    int id, {
+    required String name,
+    String? code,
+    String? description,
+    required int statusId,
+  }) async {
+    return await remote.update(
+      id,
+      name: name,
+      code: code,
+      description: description,
+      statusId: statusId,
+    );
   }
 }

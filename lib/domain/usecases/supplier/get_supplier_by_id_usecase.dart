@@ -7,4 +7,3 @@ class GetSupplierByIdUseCase {
 
   Future<Supplier?> call(int id) => repository.getById(id);
 }
-

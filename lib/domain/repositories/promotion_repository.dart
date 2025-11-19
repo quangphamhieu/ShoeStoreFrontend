@@ -8,7 +8,8 @@ abstract class PromotionRepository {
     required DateTime startDate,
     required DateTime endDate,
     required int statusId,
-    required List<Map<String, dynamic>> products, // [{productId, discountPercent}]
+    required List<Map<String, dynamic>>
+    products, // [{productId, discountPercent}]
     required List<int> storeIds,
   });
   Future<Promotion?> update(
@@ -22,4 +23,3 @@ abstract class PromotionRepository {
   });
   Future<bool> delete(int id);
 }
-

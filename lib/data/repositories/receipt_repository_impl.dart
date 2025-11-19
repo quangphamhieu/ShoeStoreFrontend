@@ -33,12 +33,17 @@ class ReceiptRepositoryImpl implements ReceiptRepository {
       statusId: 1,
       createdAt: DateTime.now(),
       totalAmount: 0,
-      details: details.map((d) => ReceiptDetailModel(
-        id: 0,
-        productId: d['productId'] as int,
-        quantityOrdered: d['quantityOrdered'] as int,
-        unitPrice: 0,
-      )).toList(),
+      details:
+          details
+              .map(
+                (d) => ReceiptDetailModel(
+                  id: 0,
+                  productId: d['productId'] as int,
+                  quantityOrdered: d['quantityOrdered'] as int,
+                  unitPrice: 0,
+                ),
+              )
+              .toList(),
     );
     return await remote.create(receipt);
   }
@@ -59,12 +64,17 @@ class ReceiptRepositoryImpl implements ReceiptRepository {
       statusId: 1,
       createdAt: DateTime.now(),
       totalAmount: 0,
-      details: details.map((d) => ReceiptDetailModel(
-        id: 0,
-        productId: d['productId'] as int,
-        quantityOrdered: d['quantityOrdered'] as int,
-        unitPrice: 0,
-      )).toList(),
+      details:
+          details
+              .map(
+                (d) => ReceiptDetailModel(
+                  id: 0,
+                  productId: d['productId'] as int,
+                  quantityOrdered: d['quantityOrdered'] as int,
+                  unitPrice: 0,
+                ),
+              )
+              .toList(),
     );
     return await remote.updateInfo(id, receipt);
   }
@@ -82,13 +92,18 @@ class ReceiptRepositoryImpl implements ReceiptRepository {
       statusId: 1,
       createdAt: DateTime.now(),
       totalAmount: 0,
-      details: details.map((d) => ReceiptDetailModel(
-        id: d['receiptDetailId'] as int,
-        productId: 0,
-        quantityOrdered: 0,
-        receivedQuantity: d['receivedQuantity'] as int,
-        unitPrice: 0,
-      )).toList(),
+      details:
+          details
+              .map(
+                (d) => ReceiptDetailModel(
+                  id: d['receiptDetailId'] as int,
+                  productId: 0,
+                  quantityOrdered: 0,
+                  receivedQuantity: d['receivedQuantity'] as int,
+                  unitPrice: 0,
+                ),
+              )
+              .toList(),
     );
     return await remote.updateReceived(id, receipt);
   }
@@ -98,4 +113,3 @@ class ReceiptRepositoryImpl implements ReceiptRepository {
     return await remote.delete(id);
   }
 }
-

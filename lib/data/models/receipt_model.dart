@@ -20,7 +20,11 @@ class ReceiptModel extends Receipt {
 
   factory ReceiptModel.fromJson(Map<String, dynamic> json) {
     final detailsJson = json['details'] as List<dynamic>?;
-    final details = detailsJson?.map((d) => ReceiptDetailModel.fromJson(d as Map<String, dynamic>)).toList() ?? [];
+    final details =
+        detailsJson
+            ?.map((d) => ReceiptDetailModel.fromJson(d as Map<String, dynamic>))
+            .toList() ??
+        [];
 
     return ReceiptModel(
       id: json['id'] as int,
@@ -33,7 +37,10 @@ class ReceiptModel extends Receipt {
       creatorName: json['creatorName'] as String?,
       statusId: json['statusId'] as int,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      receivedDate: json['receivedDate'] != null ? DateTime.parse(json['receivedDate'] as String) : null,
+      receivedDate:
+          json['receivedDate'] != null
+              ? DateTime.parse(json['receivedDate'] as String)
+              : null,
       totalAmount: (json['totalAmount'] as num).toDouble(),
       details: details,
     );
@@ -43,10 +50,15 @@ class ReceiptModel extends Receipt {
     return {
       'supplierId': supplierId,
       'storeId': storeId,
-      'details': details.map((d) => {
-        'productId': d.productId,
-        'quantityOrdered': d.quantityOrdered,
-      }).toList(),
+      'details':
+          details
+              .map(
+                (d) => {
+                  'productId': d.productId,
+                  'quantityOrdered': d.quantityOrdered,
+                },
+              )
+              .toList(),
     };
   }
 
@@ -54,19 +66,29 @@ class ReceiptModel extends Receipt {
     return {
       'supplierId': supplierId,
       'storeId': storeId,
-      'details': details.map((d) => {
-        'productId': d.productId,
-        'quantityOrdered': d.quantityOrdered,
-      }).toList(),
+      'details':
+          details
+              .map(
+                (d) => {
+                  'productId': d.productId,
+                  'quantityOrdered': d.quantityOrdered,
+                },
+              )
+              .toList(),
     };
   }
 
   Map<String, dynamic> toUpdateReceivedJson() {
     return {
-      'details': details.map((d) => {
-        'receiptDetailId': d.id,
-        'receivedQuantity': d.receivedQuantity ?? 0,
-      }).toList(),
+      'details':
+          details
+              .map(
+                (d) => {
+                  'receiptDetailId': d.id,
+                  'receivedQuantity': d.receivedQuantity ?? 0,
+                },
+              )
+              .toList(),
     };
   }
 }
@@ -82,7 +104,8 @@ class ReceiptDetailModel extends ReceiptDetail {
     required super.unitPrice,
   });
 
-  factory ReceiptDetailModel.fromJson(Map<String, dynamic> json) => ReceiptDetailModel(
+  factory ReceiptDetailModel.fromJson(Map<String, dynamic> json) =>
+      ReceiptDetailModel(
         id: json['id'] as int,
         productId: json['productId'] as int,
         productName: json['productName'] as String?,
@@ -92,4 +115,3 @@ class ReceiptDetailModel extends ReceiptDetail {
         unitPrice: (json['unitPrice'] as num).toDouble(),
       );
 }
-
