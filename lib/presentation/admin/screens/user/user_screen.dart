@@ -507,8 +507,9 @@ class _UserFormDialogState extends State<UserFormDialog> {
 
     if (widget.editMode) {
       _prefillLoading = true;
-      final provider = context.read<UserProvider>();
-      provider.getSelectedUserDetail().then((u) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final provider = context.read<UserProvider>();
+        final u = await provider.getSelectedUserDetail();
         if (!mounted) return;
         if (u != null) {
           _nameC.text = u.fullName;
@@ -516,7 +517,6 @@ class _UserFormDialogState extends State<UserFormDialog> {
           _emailC.text = u.email ?? '';
           _gender = u.gender;
           _roleId = _mapRoleNameToId(u.roleName);
-          // no roleId in entity so attempt parse from roleName if numeric, else keep default
           _statusId = u.statusName.toLowerCase().contains('active') ? 1 : 2;
           _storeId = u.storeId;
         }
