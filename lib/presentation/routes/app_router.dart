@@ -15,19 +15,43 @@ import '../admin/screens/user/login_screen.dart';
 import '../customer/screens/home_screen.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: "/",
+  // Màn hình mặc định luôn là trang home của customer
+  initialLocation: '/',
   redirect: (context, state) {
     final isLoggedIn = TokenHandler().hasToken();
-    final isLoginRoute =
-        state.matchedLocation == '/' || state.matchedLocation == '/signup';
+    final String location = state.matchedLocation;
 
-    // Nếu chưa đăng nhập và không phải trang login/signup, điều hướng đến login
-    if (!isLoggedIn && !isLoginRoute) {
-      return '/';
+    final bool isAuthRoute =
+        location == '/login' || location == '/signup';
+
+    // Các route public mà user chưa đăng nhập vẫn xem được
+    final Set<String> publicRoutes = {
+      '/',
+      '/home',
+      '/login',
+      '/signup',
+    };
+
+    // Các route chỉ dành cho admin (dashboard + module quản trị)
+    final Set<String> adminRoutes = {
+      '/dashboard',
+      '/brand',
+      '/supplier',
+      '/product',
+      '/order',
+      '/receipt',
+      '/store',
+      '/promotion',
+      '/user',
+    };
+
+    // Chưa đăng nhập mà truy cập admin route -> chuyển sang login
+    if (!isLoggedIn && adminRoutes.contains(location)) {
+      return '/login';
     }
 
-    // Nếu đã đăng nhập và đang ở trang login/signup, điều hướng dựa trên role
-    if (isLoggedIn && isLoginRoute) {
+    // Đã đăng nhập mà vẫn ở trang login/signup -> chuyển theo role
+    if (isLoggedIn && isAuthRoute) {
       final role = AuthUtils.getUserRole();
       if (role == "Super Admin" || role == "Admin") {
         return '/dashboard';
@@ -36,12 +60,19 @@ final GoRouter appRouter = GoRouter(
       }
     }
 
-    return null; // Không redirect
+    // Nếu là route public hoặc đã pass các rule trên thì không redirect
+    if (publicRoutes.contains(location) || !adminRoutes.contains(location)) {
+      return null;
+    }
+
+    return null;
   },
   routes: [
-    GoRoute(path: '/', builder: (_, __) => const LoginScreen()),
-    GoRoute(path: '/signup', builder: (_, __) => const SignUpScreen()),
+    // Trang home customer luôn ở root
+    GoRoute(path: '/', builder: (_, __) => const HomeScreen()),
     GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
+    GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
+    GoRoute(path: '/signup', builder: (_, __) => const SignUpScreen()),
     GoRoute(path: '/dashboard', builder: (_, __) => const DashboardScreen()),
     GoRoute(path: '/brand', builder: (_, __) => const BrandScreen()),
     GoRoute(path: '/supplier', builder: (_, __) => const SupplierScreen()),

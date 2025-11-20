@@ -14,73 +14,49 @@ class CustomerHeader extends StatelessWidget {
     final isLoggedIn = TokenHandler().hasToken();
     final userName = isLoggedIn ? TokenHandler().getUserName() : null;
 
-    return Container(
-      height: 80,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Logo
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.store, color: Colors.black54),
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'VỀ SHOP',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const SizedBox(width: 24),
-          // Navigation Menu - Made flexible to prevent overflow
-          Flexible(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildNavItem('HOME'),
-                  _buildNavItem('MOBILE'),
-                  _buildNavItem('TENIS'),
-                  _buildNavItem('PLANA'),
-                  _buildNavItem('NEW BALANCE'),
-                  _buildNavItem('CONVERSE', hasDropdown: true),
-                  _buildNavItem('CHỦ ĐỀ', hasDropdown: true),
-                  _buildNavItem('GIẢM GIÁ'),
-                ],
-              ),
-            ),
-          ),
-          const Spacer(),
-          // Search Bar
-          Container(
-            constraints: const BoxConstraints(maxWidth: 200, maxHeight: 38),
-            width: 200,
-            height: 38,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
+        final isTablet = maxWidth < 1100;
+        final isMobile = maxWidth < 760;
+
+        final navItems = [
+          _buildNavItem('HOME'),
+          _buildNavItem('MOBILE'),
+          _buildNavItem('TENIS'),
+          _buildNavItem('PLANA'),
+          _buildNavItem('NEW BALANCE'),
+          _buildNavItem('CONVERSE', hasDropdown: true),
+          _buildNavItem('CHỦ ĐỀ', hasDropdown: true),
+          _buildNavItem('GIẢM GIÁ'),
+        ];
+
+        final navMenu =
+            isMobile
+                ? Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 12,
+                  runSpacing: 8,
+                  children: navItems,
+                )
+                : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: navItems,
+                  ),
+                );
+
+        final searchBar = SizedBox(
+          width: isMobile ? double.infinity : 220,
+          child: Container(
+            height: 40,
             decoration: BoxDecoration(
               color: Colors.grey[100],
               borderRadius: BorderRadius.circular(20),
             ),
             child: TextField(
-              onChanged: (value) => provider.setSearchQuery(value),
+              onChanged: provider.setSearchQuery,
               decoration: InputDecoration(
                 hintText: 'Tìm kiếm sản phẩm...',
                 hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
@@ -97,12 +73,11 @@ class CustomerHeader extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          // Header Actions
+        );
+
+        final actionIcons = [
           _buildHeaderIcon(Icons.account_circle_outlined),
-          const SizedBox(width: 8),
           _buildHeaderIcon(Icons.favorite_border),
-          const SizedBox(width: 8),
           Stack(
             clipBehavior: Clip.none,
             children: [
@@ -116,10 +91,7 @@ class CustomerHeader extends StatelessWidget {
                     color: Colors.red,
                     shape: BoxShape.circle,
                   ),
-                  constraints: const BoxConstraints(
-                    minWidth: 18,
-                    minHeight: 18,
-                  ),
+                  constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
                   child: const Text(
                     '0',
                     style: TextStyle(
@@ -133,42 +105,132 @@ class CustomerHeader extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(width: 8),
-          // Hiển thị user info và đăng xuất nếu đã đăng nhập
-          if (isLoggedIn && userName != null) ...[
-            Row(
-              children: [
-                Icon(Icons.person, size: 18, color: Colors.grey[700]),
-                const SizedBox(width: 6),
-                Text(
-                  userName,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
+        ];
+
+        final authWidgets =
+            isLoggedIn && userName != null
+                ? [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.person, size: 18, color: Colors.grey[700]),
+                        const SizedBox(width: 6),
+                        Text(
+                          userName,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () => AuthUtils.logout(context),
+                      child: _buildHeaderButton('Đăng xuất'),
+                    ),
+                  ]
+                : [
+                    GestureDetector(
+                      onTap: () => context.go('/login'),
+                      child: _buildHeaderButton('Đăng Nhập'),
+                    ),
+                    GestureDetector(
+                      onTap: () => context.go('/signup'),
+                      child: _buildHeaderButton('Đăng ký', isPrimary: true),
+                    ),
+                  ];
+
+        final actions =
+            isMobile
+                ? Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    ...actionIcons,
+                    ...authWidgets,
+                  ],
+                )
+                : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (int i = 0; i < actionIcons.length; i++) ...[
+                      if (i > 0) const SizedBox(width: 8),
+                      actionIcons[i],
+                    ],
+                    const SizedBox(width: 12),
+                    ...authWidgets
+                        .expand((widget) => [widget, const SizedBox(width: 8)])
+                        .toList()
+                      ..removeLast(),
+                  ],
+                );
+
+        final logo = Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.store, color: Colors.black54),
             ),
             const SizedBox(width: 12),
-            GestureDetector(
-              onTap: () => AuthUtils.logout(context),
-              child: _buildHeaderButton('Đăng xuất'),
-            ),
-          ] else ...[
-            // Hiển thị đăng nhập/đăng ký nếu chưa đăng nhập
-            GestureDetector(
-              onTap: () => context.go('/'),
-              child: _buildHeaderButton('Đăng Nhập'),
-            ),
-            const SizedBox(width: 6),
-            GestureDetector(
-              onTap: () => context.go('/signup'),
-              child: _buildHeaderButton('Đăng ký', isPrimary: true),
+            const Text(
+              'VỀ SHOP',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
-        ],
-      ),
+        );
+
+        return Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: isTablet ? 16 : 24,
+            vertical: isMobile ? 12 : 8,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment:
+                isMobile ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+            children: [
+              if (isMobile) ...[
+                logo,
+                const SizedBox(height: 12),
+                searchBar,
+                const SizedBox(height: 12),
+                actions,
+                const SizedBox(height: 12),
+                navMenu,
+              ] else ...[
+                Row(
+                  children: [
+                    logo,
+                    const SizedBox(width: 24),
+                    Expanded(child: navMenu),
+                    const SizedBox(width: 24),
+                    searchBar,
+                    const SizedBox(width: 16),
+                    actions,
+                  ],
+                ),
+              ],
+            ],
+          ),
+        );
+      },
     );
   }
 

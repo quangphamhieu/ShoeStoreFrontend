@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../provider/menu_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shoestorefe/core/utils/auth_utils.dart';
 
@@ -9,8 +7,8 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final menuProvider = Provider.of<MenuProvider>(context);
-    final selected = menuProvider.selectedMenu;
+    final state = GoRouterState.of(context);
+    final String currentLocation = state.uri.path;
 
     final List<Map<String, dynamic>> items = [
       {
@@ -50,7 +48,7 @@ class SideMenu extends StatelessWidget {
         'title': 'Nhà cung cấp',
         'route': '/supplier',
       },
-      {'icon': Icons.logout, 'title': 'Đăng xuất', 'route': '/'},
+      {'icon': Icons.logout, 'title': 'Đăng xuất', 'route': '/logout'},
     ];
 
     return Container(
@@ -70,15 +68,16 @@ class SideMenu extends StatelessWidget {
             final String route = item['route'] as String;
             final String title = item['title'] as String;
             final IconData icon = item['icon'] as IconData;
-            final bool isActive = selected == route;
+
+            final bool isLogout = title == 'Đăng xuất';
+            final bool isActive =
+                !isLogout && currentLocation == route;
 
             return InkWell(
               onTap: () {
-                if (title == 'Đăng xuất') {
-                  // Xử lý đăng xuất
+                if (isLogout) {
                   AuthUtils.logout(context);
                 } else {
-                  menuProvider.selectMenu(route);
                   context.go(route);
                 }
               },

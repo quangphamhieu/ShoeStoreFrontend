@@ -24,6 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<CustomerProvider>();
+    final width = MediaQuery.of(context).size.width;
+
+    // Responsive số cột theo kích thước màn hình
+    int crossAxisCount;
+    if (width >= 1400) {
+      crossAxisCount = 4;
+    } else if (width >= 1100) {
+      crossAxisCount = 3;
+    } else if (width >= 800) {
+      crossAxisCount = 2;
+    } else {
+      crossAxisCount = 1;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -75,37 +88,48 @@ class _HomeScreenState extends State<HomeScreen> {
                   provider.isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : provider.filteredProductGroups.isEmpty
-                      ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(40.0),
-                          child: Text(
-                            'Không tìm thấy sản phẩm',
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
-                        ),
-                      )
-                      : Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.only(bottom: 40),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                childAspectRatio: 0.72,
-                                crossAxisSpacing: 28,
-                                mainAxisSpacing: 28,
+                          ? const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(40.0),
+                                child: Text(
+                                  'Không tìm thấy sản phẩm',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
+                                ),
                               ),
-                          itemCount: provider.filteredProductGroups.length,
-                          itemBuilder: (context, index) {
-                            return ProductCard(
-                              productGroup:
-                                  provider.filteredProductGroups[index],
-                            );
-                          },
-                        ),
-                      ),
+                            )
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  return GridView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    padding:
+                                        const EdgeInsets.only(bottom: 40),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: crossAxisCount,
+                                      childAspectRatio: 0.72,
+                                      crossAxisSpacing: 20,
+                                      mainAxisSpacing: 20,
+                                    ),
+                                    itemCount:
+                                        provider.filteredProductGroups.length,
+                                    itemBuilder: (context, index) {
+                                      return ProductCard(
+                                        productGroup: provider
+                                            .filteredProductGroups[index],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
                 ],
               ),
             ),
