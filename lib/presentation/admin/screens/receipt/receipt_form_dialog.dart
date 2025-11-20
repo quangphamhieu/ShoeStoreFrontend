@@ -30,8 +30,8 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
   bool _loading = false;
   bool _prefillLoading = false;
 
-  List<Map<String, dynamic>> _selectedProducts =
-      []; // [{productId, productName, sku, supplierId, quantityOrdered, receivedQuantity, receiptDetailId?}]
+  List<Map<String, Object?>> _selectedProducts =
+      <Map<String, Object?>>[]; // [{productId, productName, sku, supplierId, quantityOrdered, receivedQuantity, receiptDetailId?}]
   List<Product> _searchResults = [];
   bool _supplierReminderQueued = false;
 
@@ -50,7 +50,7 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
   }
 
   void _removeSelectedProductsWhere(
-    bool Function(Map<String, dynamic>) predicate,
+    bool Function(Map<String, Object?>) predicate,
   ) {
     final removing = _selectedProducts.where(predicate).toList();
     for (final product in removing) {
@@ -117,7 +117,7 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
           _selectedProducts =
               r.details
                   .map(
-                    (d) => {
+                    (d) => Map<String, Object?>.from({
                       'productId': d.productId,
                       'productName': d.productName ?? 'Unknown',
                       'sku': d.sku ?? d.productName ?? 'Unknown',
@@ -125,18 +125,18 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
                       'quantityOrdered': d.quantityOrdered,
                       'receiptDetailId': d.id,
                       'receivedQuantity': d.receivedQuantity ?? 0,
-                    },
+                    }),
                   )
                   .toList();
           for (var product in _selectedProducts) {
-            _quantityControllers[product['productId']] = TextEditingController(
+            final productId = product['productId'] as int;
+            _quantityControllers[productId] = TextEditingController(
               text: product['quantityOrdered'].toString(),
             );
             if (widget.isReceiveMode || widget.editMode) {
-              _receivedQuantityControllers[product['productId']] =
-                  TextEditingController(
-                    text: (product['receivedQuantity'] ?? 0).toString(),
-                  );
+              _receivedQuantityControllers[productId] = TextEditingController(
+                text: (product['receivedQuantity'] ?? 0).toString(),
+              );
             }
           }
           _prefillLoading = false;
@@ -180,7 +180,9 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
                 return name.contains(q) || sku.contains(q);
               })
               .where(
-                (p) => !_selectedProducts.any((sp) => sp['productId'] == p.id),
+                (p) => !_selectedProducts.any(
+                  (sp) => (sp['productId'] as int) == p.id,
+                ),
               )
               .toList();
     });
@@ -202,14 +204,14 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
     if (_selectedProducts.any((p) => p['productId'] == product.id)) return;
 
     setState(() {
-      _selectedProducts.add({
+      _selectedProducts.add(Map<String, Object?>.from({
         'productId': product.id,
         'productName': product.name,
         'sku': product.sku ?? product.name,
         'supplierId': product.supplierId,
         'quantityOrdered': 0,
         'receivedQuantity': 0,
-      });
+      }));
       _quantityControllers[product.id] = TextEditingController(text: '0');
       if (widget.isReceiveMode || widget.editMode) {
         _receivedQuantityControllers[product.id] = TextEditingController(
@@ -223,7 +225,9 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
 
   void _removeProduct(int productId) {
     setState(() {
-      _selectedProducts.removeWhere((p) => p['productId'] == productId);
+      _selectedProducts.removeWhere(
+        (p) => (p['productId'] as int) == productId,
+      );
       _quantityControllers[productId]?.dispose();
       _quantityControllers.remove(productId);
       _receivedQuantityControllers[productId]?.dispose();
@@ -283,11 +287,14 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
       final details =
           _selectedProducts
               .map(
-                (p) => {
-                  'receiptDetailId': p['receiptDetailId'],
-                  'receivedQuantity': int.parse(
-                    _receivedQuantityControllers[p['productId']]!.text,
-                  ),
+                (p) {
+                  final productId = p['productId'] as int;
+                  return {
+                    'receiptDetailId': p['receiptDetailId'],
+                    'receivedQuantity': int.parse(
+                      _receivedQuantityControllers[productId]!.text,
+                    ),
+                  };
                 },
               )
               .toList();
@@ -300,11 +307,14 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
       final details =
           _selectedProducts
               .map(
-                (p) => {
-                  'productId': p['productId'],
-                  'quantityOrdered': int.parse(
-                    _quantityControllers[p['productId']]!.text,
-                  ),
+                (p) {
+                  final productId = p['productId'] as int;
+                  return {
+                    'productId': productId,
+                    'quantityOrdered': int.parse(
+                      _quantityControllers[productId]!.text,
+                    ),
+                  };
                 },
               )
               .toList();
@@ -322,11 +332,14 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
       final details =
           _selectedProducts
               .map(
-                (p) => {
-                  'productId': p['productId'],
-                  'quantityOrdered': int.parse(
-                    _quantityControllers[p['productId']]!.text,
-                  ),
+                (p) {
+                  final productId = p['productId'] as int;
+                  return {
+                    'productId': productId,
+                    'quantityOrdered': int.parse(
+                      _quantityControllers[productId]!.text,
+                    ),
+                  };
                 },
               )
               .toList();
@@ -527,7 +540,7 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
                                                               (p) =>
                                                                   !_selectedProducts.any(
                                                                     (sp) =>
-                                                                        sp['productId'] ==
+                                                                        (sp['productId'] as int) ==
                                                                         p.id,
                                                                   ),
                                                             )
@@ -657,10 +670,15 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
                                   itemCount: _selectedProducts.length,
                                   itemBuilder: (context, index) {
                                     final product = _selectedProducts[index];
-                                    final productId = product['productId'];
+                                    final productId = product['productId'] as int;
                                     final sku =
                                         (product['sku'] as String?) ??
-                                        product['productName'];
+                                        (product['productName'] as String?) ??
+                                        'Sản phẩm';
+                                    final quantityOrdered =
+                                        (product['quantityOrdered'] as int?) ?? 0;
+                                    final receivedQuantity =
+                                        (product['receivedQuantity'] as int?) ?? 0;
                                     return Container(
                                       margin: const EdgeInsets.symmetric(
                                         horizontal: 12,
@@ -686,7 +704,7 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
                                                 ),
                                                 if (widget.isReceiveMode)
                                                   Text(
-                                                    'Đã đặt: ${product['quantityOrdered']}',
+                                                    'Đã đặt: $quantityOrdered',
                                                     style: TextStyle(
                                                       fontSize: 12,
                                                       color: Colors.grey[600],
@@ -779,9 +797,9 @@ class _ReceiptFormDialogState extends State<ReceiptFormDialog> {
                                                   );
                                                   if (qty == null || qty < 0)
                                                     return '>= 0';
-                                                  if (qty >
-                                                      product['quantityOrdered'])
-                                                    return '<= ${product['quantityOrdered']}';
+                                                  if (qty > quantityOrdered) {
+                                                    return '<= $quantityOrdered';
+                                                  }
                                                   return null;
                                                 },
                                               ),

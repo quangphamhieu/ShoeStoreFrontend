@@ -1,5 +1,6 @@
 import '../../core/constants/api_endpoint.dart';
 import '../../core/network/api_client.dart';
+import '../../core/utils/json_utils.dart';
 import '../models/receipt_model.dart';
 
 class ReceiptRemoteDataSource {
@@ -11,7 +12,7 @@ class ReceiptRemoteDataSource {
     final data = response.data;
     if (data is List) {
       return data
-          .map((e) => ReceiptModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => ReceiptModel.fromJson(JsonUtils.normalizeMap(e)))
           .toList();
     }
     return [];
@@ -20,8 +21,8 @@ class ReceiptRemoteDataSource {
   Future<ReceiptModel?> getById(int id) async {
     final response = await client.get('${ApiEndpoint.receipts}/$id');
     final data = response.data;
-    if (data is Map<String, dynamic>) {
-      return ReceiptModel.fromJson(data);
+    if (data is Map || data is Map<String, dynamic>) {
+      return ReceiptModel.fromJson(JsonUtils.normalizeMap(data));
     }
     return null;
   }
@@ -31,7 +32,7 @@ class ReceiptRemoteDataSource {
       ApiEndpoint.receipts,
       receipt.toCreateJson(),
     );
-    return ReceiptModel.fromJson(response.data as Map<String, dynamic>);
+    return ReceiptModel.fromJson(JsonUtils.normalizeMap(response.data));
   }
 
   Future<ReceiptModel?> updateInfo(int id, ReceiptModel receipt) async {
@@ -40,8 +41,8 @@ class ReceiptRemoteDataSource {
       receipt.toUpdateJson(),
     );
     final data = response.data;
-    if (data is Map<String, dynamic>) {
-      return ReceiptModel.fromJson(data);
+    if (data is Map || data is Map<String, dynamic>) {
+      return ReceiptModel.fromJson(JsonUtils.normalizeMap(data));
     }
     return null;
   }
@@ -52,8 +53,8 @@ class ReceiptRemoteDataSource {
       receipt.toUpdateReceivedJson(),
     );
     final data = response.data;
-    if (data is Map<String, dynamic>) {
-      return ReceiptModel.fromJson(data);
+    if (data is Map || data is Map<String, dynamic>) {
+      return ReceiptModel.fromJson(JsonUtils.normalizeMap(data));
     }
     return null;
   }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../core/constants/api_endpoint.dart';
 import '../../core/network/api_client.dart';
+import '../../core/utils/json_utils.dart';
 import '../models/product_model.dart';
 
 class ProductRemoteDataSource {
@@ -12,7 +13,7 @@ class ProductRemoteDataSource {
     final data = response.data;
     if (data is List) {
       return data
-          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => ProductModel.fromJson(JsonUtils.normalizeMap(e)))
           .toList();
     }
     return [];
@@ -21,8 +22,8 @@ class ProductRemoteDataSource {
   Future<ProductModel?> getById(int id) async {
     final response = await client.get('${ApiEndpoint.products}/$id');
     final data = response.data;
-    if (data is Map<String, dynamic>) {
-      return ProductModel.fromJson(data);
+    if (data is Map || data is Map<String, dynamic>) {
+      return ProductModel.fromJson(JsonUtils.normalizeMap(data));
     }
     return null;
   }
@@ -65,7 +66,7 @@ class ProductRemoteDataSource {
     });
 
     final response = await client.postMultipart(ApiEndpoint.products, formData);
-    return ProductModel.fromJson(response.data as Map<String, dynamic>);
+    return ProductModel.fromJson(JsonUtils.normalizeMap(response.data));
   }
 
   Future<ProductModel?> update(
@@ -113,8 +114,8 @@ class ProductRemoteDataSource {
       formData,
     );
     final data = response.data;
-    if (data is Map<String, dynamic>) {
-      return ProductModel.fromJson(data);
+    if (data is Map || data is Map<String, dynamic>) {
+      return ProductModel.fromJson(JsonUtils.normalizeMap(data));
     }
     return null;
   }
@@ -142,7 +143,7 @@ class ProductRemoteDataSource {
     final data = response.data;
     if (data is List) {
       return data
-          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => ProductModel.fromJson(JsonUtils.normalizeMap(e)))
           .toList();
     }
     return [];
@@ -177,8 +178,8 @@ class ProductRemoteDataSource {
       final url = '${ApiEndpoint.products}/$productId/store-quantity';
       final response = await client.post(url, body);
       final data = response.data;
-      if (data is Map<String, dynamic>) {
-        return StoreQuantityModel.fromJson(data);
+      if (data is Map || data is Map<String, dynamic>) {
+        return StoreQuantityModel.fromJson(JsonUtils.normalizeMap(data));
       }
       return null;
     } on DioException catch (e) {
@@ -223,8 +224,8 @@ class ProductRemoteDataSource {
       final url = '${ApiEndpoint.products}/$productId/store-quantity';
       final response = await client.put(url, body);
       final data = response.data;
-      if (data is Map<String, dynamic>) {
-        return StoreQuantityModel.fromJson(data);
+      if (data is Map || data is Map<String, dynamic>) {
+        return StoreQuantityModel.fromJson(JsonUtils.normalizeMap(data));
       }
       return null;
     } on DioException catch (e) {
